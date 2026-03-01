@@ -518,11 +518,20 @@ function renderUniformLabel(item, typeInfo, isBW, safeW, safeH) {
   '</div>';
 }
 
-function renderLabelHTML(item, isBW, safeW, safeH) {
+function renderLabelHTML(item, isBW, safeW, safeH, rotated) {
   var typeCode = item.component_type || 'OTHER';
   if (typeCode === 'OPTO' || typeCode === 'FILT' || typeCode === 'SENS') typeCode = 'IC';
   if (typeCode === 'MOSFET' || typeCode === 'GAN') typeCode = 'FET';
   var typeInfo = SUNBURN_TYPES[typeCode] || SUNBURN_TYPES.OTHER;
+  if (rotated) {
+    // For continuous tape (Brother): render content at swapped dimensions, then rotate 90°
+    var innerHTML = renderUniformLabel(item, typeInfo, isBW, safeH, safeW);
+    return '<div style="position:absolute;inset:0;overflow:hidden;">' +
+      '<div style="width:' + safeH + 'px;height:' + safeW + 'px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);">' +
+        innerHTML +
+      '</div>' +
+    '</div>';
+  }
   return renderUniformLabel(item, typeInfo, isBW, safeW, safeH);
 }
 
@@ -552,7 +561,8 @@ function generateLabelPage(item, options) {
   var safeH = Math.round((heightInches - margins.top - margins.bottom) * 96);
   var printScale = dpi / 96;
 
-  var labelHTML = renderLabelHTML(item, isBW, safeW, safeH);
+  var rotated = !!options.rotated;
+  var labelHTML = renderLabelHTML(item, isBW, safeW, safeH, rotated);
 
   return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
     '<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700;800&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">' +
@@ -591,7 +601,7 @@ async function renderComponentLabel(item, options) {
   var isBrother = printer === 'brother';
 
   var widthInches = options.widthInches || (isBrother ? 1.0 : 0.98);
-  var heightInches = options.heightInches || (isBrother ? 1.5 : 0.49);
+  var heightInches = options.heightInches || (isBrother ? 0.92 : 0.49);
   var dpi = options.dpi || (isBrother ? 313 : 300);
   var isBW = options.isBW !== undefined ? options.isBW : !isBrother;
   var bgColor = options.bgColor || '#FFFFFF';
@@ -603,9 +613,11 @@ async function renderComponentLabel(item, options) {
   var pxW = Math.round(widthInches * dpi);
   var pxH = Math.round(heightInches * dpi);
 
+  var rotated = !!options.rotated;
+
   var html = generateLabelPage(item, {
     dpi: dpi, widthInches: widthInches, heightInches: heightInches,
-    isBW: isBW, bgColor: bgColor, margins: margins,
+    isBW: isBW, bgColor: bgColor, margins: margins, rotated: rotated,
   });
 
   var puppeteer = require('puppeteer');
