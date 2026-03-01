@@ -2,9 +2,11 @@
 
 Open-source driver and complete protocol reference for the **Brother VC-500W** color label printer. Works over **WiFi (TCP)** and **USB** on Windows, with WiFi support on any platform with TCP sockets.
 
-<!-- Uncomment when images are added:
-![Printer in action](images/printer-in-action.jpg)
--->
+![Brother VC-500W printing component labels](images/printer-1.jpg)
+
+![Printer outputting labels on the workbench](images/printer-2.jpg)
+
+![Labeled WENTAI component boxes — this is the goal](images/printer-3.jpg)
 
 ## Why This Exists
 
@@ -344,6 +346,30 @@ The printer auto-sleeps after being idle for several minutes. When asleep:
 - **Physical button press required to wake**
 - Keep-alive polling (e.g., status query every 45 seconds) prevents sleep
 
+### Label Output — Printer Orientation (Important!)
+
+**The printer will NOT print the next label if the previous label is still sitting in the output slot.** It will blink its lights and refuse to continue. This is a hardware limitation — the output slot has a sensor that detects when a label hasn't been removed.
+
+**The fix:** Tilt the printer upright (output slot facing down) so labels fall out by gravity as they print. This lets you run batch prints hands-free. Without this, you'd have to manually pull each label out before the next one can print.
+
+```
+  Normal (won't batch):       Tilted upright (batch-friendly):
+
+  ┌─────────────┐                    ┌───┐
+  │   brother    │                    │   │
+  │   ColAura    │                    │ b │
+  │              │                    │ r │
+  │  ┌───────┐  │                    │ o │
+  │  │ label │←── stuck!             │ t │
+  │  └───────┘  │                    │ h │
+  └─────────────┘                    │ e │
+                                     │ r │
+                                     │   │
+                                     └─┬─┘
+                                       │
+                                     label ↓ (falls out by gravity)
+```
+
 ### Multi-Label Printing
 For printing multiple labels sequentially:
 
@@ -351,7 +377,7 @@ For printing multiple labels sequentially:
 
 2. **Lock approach** (not recommended): Acquire lock, print multiple labels without closing socket, release lock. Error-prone — if anything goes wrong, the lock can get stuck and requires manual release.
 
-3. **The printer will complain** (blinking lights, refuse to print) if a label is not removed/cleared from the output slot before the next one prints. Tilting the printer upright so labels fall out by gravity solves this.
+3. **Tilt the printer upright** so labels fall out by gravity (see above). This is essential for unattended batch printing.
 
 ### Image Format
 - Input: JPEG (any resolution)
