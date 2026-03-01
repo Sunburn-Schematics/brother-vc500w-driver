@@ -17,5 +17,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Sunburn-Schematics/brother-vc500w-driver"
+  },
+  "dependencies": {
+    "puppeteer": "^24.37.5",
+    "qrcode": "^1.5.4"
   }
 }
