@@ -1,0 +1,21 @@
+{
+  "name": "brother-vc500w-driver",
+  "version": "1.0.0",
+  "description": "Open-source driver and protocol documentation for the Brother VC-500W color label printer",
+  "main": "driver.js",
+  "keywords": [
+    "brother",
+    "vc-500w",
+    "vc500w",
+    "label-printer",
+    "zink",
+    "printer-driver",
+    "reverse-engineering"
+  ],
+  "author": "Sunburn Schematics",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sunburn-Schematics/brother-vc500w-driver"
+  }
+}
