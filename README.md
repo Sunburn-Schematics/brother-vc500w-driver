@@ -1,8 +1,35 @@
 # Brother VC-500W Driver & Protocol Documentation
 
-An open-source driver and complete protocol reference for the **Brother VC-500W** color label printer. Works over **WiFi (TCP)** and **USB** on Windows, with WiFi support on any platform with TCP sockets.
+Open-source driver and complete protocol reference for the **Brother VC-500W** color label printer. Works over **WiFi (TCP)** and **USB** on Windows, with WiFi support on any platform with TCP sockets.
 
-The VC-500W is Brother's ZINK-based full-color label printer. Despite being a capable device, Brother provides no Linux drivers, no protocol documentation, and only a locked-down Windows/Mac application. This project documents the full communication protocol (reverse-engineered from packet captures and production use) and provides working drivers in **Node.js** and **C#**.
+<!-- Uncomment when images are added:
+![Printer in action](images/printer-in-action.jpg)
+-->
+
+## Why This Exists
+
+If you've ever prototyped with SMD components, you know the pain. You've got dozens of tiny WENTAI boxes full of 0402 capacitors, 0603 resistors, SOT-23 transistors — and they all look identical. You're squinting at faded factory labels, cross-referencing Digi-Key order sheets, and losing 10 minutes every time you need a 4.7uF cap because it's buried in a box that says "CL05A475MP5NRNC" in 4-point font.
+
+The Brother VC-500W with the **3/4" (19mm) CZ-1003 tape** or **1" (25mm) CZ-1004 tape** solves this. Print full-color labels with the part number, value, package size, and even a thumbnail of the schematic symbol — stick it right on the WENTAI box. Now you can actually find what you need while you're in the middle of hand-soldering a prototype board.
+
+The problem? Brother only ships a locked-down Windows/Mac app with no API, no Linux support, and zero protocol documentation. So we reverse-engineered the whole thing.
+
+This project gives you:
+- **The complete XML-over-TCP protocol** — every command, response, and status code documented
+- **Working Node.js drivers** for WiFi and USB
+- **A C# USB driver** for direct Windows device I/O
+- **Production-tested** — we print hundreds of component labels with this at [Sunburn Schematics](https://sunburnschematics.com)
+
+### The Workflow
+
+1. Design your labels in whatever tool you want (we built a web app for it)
+2. Send JPEG images to the printer over WiFi or USB
+3. The printer auto-scales to fit the tape width
+4. Full-cut mode gives you individual stickers; half-cut gives you a peelable strip
+5. Stick them on your component boxes, bins, bags — whatever your storage system is
+6. Actually find the right 0402 cap on the first try instead of the fifth
+
+For batch printing (labeling all your boxes at once), the driver supports sequential printing with automatic IDLE detection between labels — about 15 seconds per label. Tilt the printer upright so the labels fall out by gravity and it runs hands-free.
 
 ## Quick Start
 
