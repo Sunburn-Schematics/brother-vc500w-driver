@@ -607,7 +607,7 @@ async function renderComponentLabel(item, options) {
   var bgColor = options.bgColor || '#FFFFFF';
   var format = options.format || (isBrother ? 'jpeg' : 'png');
   var margins = options.margins || (isBrother
-    ? { top: 0.052, right: 0, bottom: 0.03, left: 0 }
+    ? { top: 0.052, right: 0, bottom: 0.03, left: 0.04 }
     : { top: 0.02, right: 0.075, bottom: 0.02, left: 0.075 });
 
   var pxW = Math.round(widthInches * dpi);
