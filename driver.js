@@ -251,23 +251,44 @@ function buildPrintXml(jpegSize, options) {
 async function scanSubnetForPrinter(prefix) {
   var BATCH_SIZE = 50;
   var CONNECT_TIMEOUT = 500;
+  var SCAN_TOTAL_TIMEOUT = 10000;
 
-  console.log('[scanSubnet] Scanning subnet ' + prefix + '.0/24 for port 9100 (batch size=' + BATCH_SIZE + ', timeout=' + CONNECT_TIMEOUT + 'ms)');
+  console.log('[scanSubnet] Scanning subnet ' + prefix + '.0/24 (timeout=' + SCAN_TOTAL_TIMEOUT + 'ms)');
+
+  var scanStart = Date.now();
 
   function probeHost(ip) {
-    return new Promise(function (resolve) {
+    var socketPromise = new Promise(function (resolve) {
+      var settled = false;
       var socket = new net.Socket();
       socket.setTimeout(CONNECT_TIMEOUT);
-      socket.connect(9100, ip, function () { resolve(ip); socket.destroy(); });
-      socket.on('error', function (err) { resolve(null); socket.destroy(); });
-      socket.on('timeout', function () { resolve(null); socket.destroy(); });
+      socket.connect(9100, ip, function () {
+        if (!settled) { settled = true; console.log('[scanSubnet] ' + ip + ' -> OPEN'); resolve(ip); }
+        socket.destroy();
+      });
+      socket.on('error', function () {
+        if (!settled) { settled = true; resolve(null); }
+        socket.destroy();
+      });
+      socket.on('timeout', function () {
+        if (!settled) { settled = true; resolve(null); }
+        socket.destroy();
+      });
     });
+    var hardTimeout = new Promise(function (resolve) {
+      setTimeout(function () { resolve(null); }, CONNECT_TIMEOUT + 200);
+    });
+    return Promise.race([socketPromise, hardTimeout]);
   }
 
   var totalResponders = 0;
   for (var start = 1; start <= 254; start += BATCH_SIZE) {
+    if (Date.now() - scanStart > SCAN_TOTAL_TIMEOUT) {
+      console.log('[scanSubnet] Total scan timeout reached (' + SCAN_TOTAL_TIMEOUT + 'ms), aborting.');
+      break;
+    }
     var end = Math.min(start + BATCH_SIZE - 1, 254);
-    console.log('[scanSubnet] Probing ' + prefix + '.' + start + ' - ' + prefix + '.' + end);
+    console.log('[scanSubnet] Probing batch ' + prefix + '.' + start + ' - ' + prefix + '.' + end);
     var batch = [];
     for (var i = start; i < start + BATCH_SIZE && i <= 254; i++) {
       batch.push(probeHost(prefix + '.' + i));
@@ -296,7 +317,7 @@ async function scanSubnetForPrinter(prefix) {
       }
     }
   }
-  console.log('[scanSubnet] Scan complete. Hosts with port 9100 open: ' + totalResponders + '. No VC-500W found.');
+  console.log('[scanSubnet] Scan complete in ' + (Date.now() - scanStart) + 'ms. Hosts with port 9100 open: ' + totalResponders + '. No VC-500W found.');
   return null;
 }
 
@@ -363,6 +384,11 @@ async function discoverPrinter(options) {
     for (var j = 0; j < addrs.length; j++) {
       var addr = addrs[j];
       if (addr.family === 'IPv4' && !addr.internal) {
+        // Skip Tailscale and other VPN interfaces (100.64.0.0/10)
+        if (keys[i].toLowerCase().indexOf('tailscale') >= 0 || addr.address.startsWith('100.')) {
+          console.log('[discover] Tier 2: Skipping VPN/Tailscale interface ' + keys[i] + ' (' + addr.address + ')');
+          continue;
+        }
         var parts = addr.address.split('.');
         if (parts.length === 4) {
           var subnet = parts.slice(0, 3).join('.');
@@ -428,14 +454,29 @@ class VC500WDriver {
     }
 
     if (!this.host) {
+      // Check config for manual host before running discovery
+      try {
+        var configRaw = fs.readFileSync(require('path').join(os.homedir(), '.sunburn-app', 'config.json'), 'utf8');
+        var config = JSON.parse(configRaw);
+        if (config.printerBrotherHost) {
+          console.log('[VC500W] Using manual config host: ' + config.printerBrotherHost);
+          this.host = config.printerBrotherHost;
+        }
+      } catch (e) {
+        // Config file missing or invalid — continue to discovery
+      }
+    }
+
+    if (!this.host) {
       var found = await discoverPrinter();
       if (found && found.error) {
-        // Discovery returned a structured error — try config fallback
+        // Discovery returned a structured error — try printerIp as last resort
         try {
-          var configRaw = fs.readFileSync(require('path').join(os.homedir(), '.sunburn-app', 'config.json'), 'utf8');
-          var config = JSON.parse(configRaw);
-          if (config.printerBrotherHost || config.printerIp) {
-            this.host = config.printerBrotherHost || config.printerIp;
+          var configRaw2 = fs.readFileSync(require('path').join(os.homedir(), '.sunburn-app', 'config.json'), 'utf8');
+          var config2 = JSON.parse(configRaw2);
+          if (config2.printerIp) {
+            console.log('[VC500W] Discovery failed, falling back to config printerIp: ' + config2.printerIp);
+            this.host = config2.printerIp;
           }
         } catch (e) {
           // Config file missing or invalid — ignore
