@@ -481,6 +481,11 @@ class VC500WDriver {
         } catch (e) {
           // Config file missing or invalid — ignore
         }
+        if (!this.host && process.env.BROTHER_PRINTER_HOST) {
+          console.log('[VC500W] Discovery failed, using BROTHER_PRINTER_HOST env fallback: ' + process.env.BROTHER_PRINTER_HOST);
+          this.host = process.env.BROTHER_PRINTER_HOST;
+          this.port = 9100;
+        }
         if (!this.host) throw new Error(found.message);
       } else if (found && found.method === 'usb') {
         // Discovery found printer via USB
