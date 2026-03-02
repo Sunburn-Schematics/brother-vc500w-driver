@@ -16,6 +16,7 @@
 
 var net = require('net');
 var os = require('os');
+var fs = require('fs');
 
 var XML_PREFIX = '<?xml version="1.0" encoding="UTF-8"?>\n';
 
@@ -216,17 +217,22 @@ async function scanSubnetForPrinter(prefix) {
   var BATCH_SIZE = 50;
   var CONNECT_TIMEOUT = 500;
 
+  console.log('[scanSubnet] Scanning subnet ' + prefix + '.0/24 for port 9100 (batch size=' + BATCH_SIZE + ', timeout=' + CONNECT_TIMEOUT + 'ms)');
+
   function probeHost(ip) {
     return new Promise(function (resolve) {
       var socket = new net.Socket();
       socket.setTimeout(CONNECT_TIMEOUT);
       socket.connect(9100, ip, function () { resolve(ip); socket.destroy(); });
-      socket.on('error', function () { resolve(null); socket.destroy(); });
+      socket.on('error', function (err) { resolve(null); socket.destroy(); });
       socket.on('timeout', function () { resolve(null); socket.destroy(); });
     });
   }
 
+  var totalResponders = 0;
   for (var start = 1; start <= 254; start += BATCH_SIZE) {
+    var end = Math.min(start + BATCH_SIZE - 1, 254);
+    console.log('[scanSubnet] Probing ' + prefix + '.' + start + ' - ' + prefix + '.' + end);
     var batch = [];
     for (var i = start; i < start + BATCH_SIZE && i <= 254; i++) {
       batch.push(probeHost(prefix + '.' + i));
@@ -234,6 +240,8 @@ async function scanSubnetForPrinter(prefix) {
     var results = await Promise.all(batch);
     for (var r = 0; r < results.length; r++) {
       if (results[r]) {
+        totalResponders++;
+        console.log('[scanSubnet] Port 9100 open on ' + results[r] + ', verifying if Brother VC-500W...');
         // Verify it's a Brother printer
         try {
           var conn = new TCPConnection(results[r], 9100);
@@ -242,14 +250,18 @@ async function scanSubnetForPrinter(prefix) {
           conn.close();
           var model = parseXmlValue(resp, 'model_name');
           if (model && model.indexOf('VC-500W') >= 0) {
+            console.log('[scanSubnet] Found VC-500W at ' + results[r] + ' (model=' + model + ')');
             return results[r];
+          } else {
+            console.log('[scanSubnet] ' + results[r] + ' responded but model=' + (model || '(none)') + ', not VC-500W');
           }
         } catch (e) {
-          // Not a VC-500W
+          console.log('[scanSubnet] ' + results[r] + ' verification failed: ' + e.message);
         }
       }
     }
   }
+  console.log('[scanSubnet] Scan complete. Hosts with port 9100 open: ' + totalResponders + '. No VC-500W found.');
   return null;
 }
 
@@ -264,13 +276,19 @@ async function scanSubnetForPrinter(prefix) {
  */
 async function discoverPrinter(options) {
   options = options || {};
+  console.log('[discover] Starting printer discovery (hostname=' + (options.hostname || 'none') + ', savedIp=' + (options.savedIp || 'none') + ')');
 
   // Tier 1: Try hostname
   var hosts = [];
   if (options.hostname) hosts.push(options.hostname);
   if (options.savedIp) hosts.push(options.savedIp);
 
+  if (hosts.length === 0) {
+    console.log('[discover] Tier 1: No hostname or savedIp provided, skipping direct connect');
+  }
+
   for (var hi = 0; hi < hosts.length; hi++) {
+    console.log('[discover] Tier 1: Trying direct connect to ' + hosts[hi] + ':9100...');
     try {
       var socket = new net.Socket();
       var ip = await new Promise(function (resolve) {
@@ -279,29 +297,55 @@ async function discoverPrinter(options) {
           resolve(socket.remoteAddress);
           socket.destroy();
         });
-        socket.on('error', function () { resolve(null); socket.destroy(); });
-        socket.on('timeout', function () { resolve(null); socket.destroy(); });
+        socket.on('error', function (err) {
+          console.log('[discover] Tier 1: ' + hosts[hi] + ' error: ' + err.message);
+          resolve(null);
+          socket.destroy();
+        });
+        socket.on('timeout', function () {
+          console.log('[discover] Tier 1: ' + hosts[hi] + ' timed out after 2000ms');
+          resolve(null);
+          socket.destroy();
+        });
       });
-      if (ip) return { host: ip, port: 9100 };
-    } catch (e) {}
+      if (ip) {
+        console.log('[discover] Tier 1: Connected to ' + hosts[hi] + ' (resolved IP: ' + ip + ')');
+        return { host: ip, port: 9100 };
+      }
+      console.log('[discover] Tier 1: ' + hosts[hi] + ' failed (no connection)');
+    } catch (e) {
+      console.log('[discover] Tier 1: ' + hosts[hi] + ' exception: ' + e.message);
+    }
   }
 
   // Tier 2: Subnet scan
   var ifaces = os.networkInterfaces();
   var keys = Object.keys(ifaces);
+  console.log('[discover] Tier 2: Scanning subnets. Network interfaces: ' + keys.join(', '));
+  var scannedSubnets = 0;
   for (var i = 0; i < keys.length; i++) {
     var addrs = ifaces[keys[i]];
     for (var j = 0; j < addrs.length; j++) {
-      if (addrs[j].family === 'IPv4' && !addrs[j].internal) {
-        var parts = addrs[j].address.split('.');
+      var addr = addrs[j];
+      if (addr.family === 'IPv4' && !addr.internal) {
+        var parts = addr.address.split('.');
         if (parts.length === 4) {
-          var found = await scanSubnetForPrinter(parts.slice(0, 3).join('.'));
-          if (found) return { host: found, port: 9100 };
+          var subnet = parts.slice(0, 3).join('.');
+          console.log('[discover] Tier 2: Scanning interface ' + keys[i] + ' (' + addr.address + ') -> subnet ' + subnet + '.0/24');
+          scannedSubnets++;
+          var found = await scanSubnetForPrinter(subnet);
+          if (found) {
+            console.log('[discover] Tier 2: Found printer at ' + found);
+            return { host: found, port: 9100 };
+          }
         }
+      } else {
+        console.log('[discover] Tier 2: Skipping interface ' + keys[i] + ' (' + addr.address + ', family=' + addr.family + ', internal=' + addr.internal + ')');
       }
     }
   }
 
+  console.log('[discover] Discovery failed. Scanned ' + scannedSubnets + ' subnet(s), no VC-500W found.');
   return null;
 }
 
@@ -328,9 +372,22 @@ class VC500WDriver {
   async connect() {
     if (!this.host) {
       var found = await discoverPrinter();
-      if (!found) throw new Error('No Brother VC-500W found on the network');
-      this.host = found.host;
-      this.port = found.port;
+      if (!found) {
+        // Fallback: try loading host from config file
+        try {
+          var configRaw = fs.readFileSync(require('path').join(os.homedir(), '.sunburn-app', 'config.json'), 'utf8');
+          var config = JSON.parse(configRaw);
+          if (config.printerBrotherHost) {
+            this.host = config.printerBrotherHost;
+          }
+        } catch (e) {
+          // Config file missing or invalid — ignore
+        }
+        if (!this.host) throw new Error('No Brother VC-500W found on the network');
+      } else {
+        this.host = found.host;
+        this.port = found.port;
+      }
     }
 
     this.connection = new TCPConnection(this.host, this.port);
