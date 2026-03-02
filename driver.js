@@ -183,6 +183,41 @@ class TCPConnection {
   }
 }
 
+// ---------- USB Connection ----------
+
+/**
+ * USB connection to the printer via driver-usb.js.
+ * Write-only: status/config reads are not supported over USB.
+ */
+class USBConnection {
+  constructor(devicePath) {
+    this.devicePath = devicePath;
+  }
+
+  connect() {
+    var usb = require('./driver-usb');
+    return usb.checkConnection(this.devicePath).then(function (r) {
+      if (!r.alive) throw new Error('USB printer not connected');
+    });
+  }
+
+  sendCommand(xml, timeout) {
+    throw new Error('Status/config reads not supported over USB');
+  }
+
+  sendPrintJob(xml, jpegBuffer, timeout) {
+    var usb = require('./driver-usb');
+    return usb.printBuffer(this.devicePath, jpegBuffer, {}).then(function (r) {
+      if (!r.success) throw new Error('USB print failed: ' + r.output);
+      return '<status><code>0</code></status>';
+    });
+  }
+
+  close() {
+    // no-op — USB connections are per-operation
+  }
+}
+
 // ---------- Print XML Builder ----------
 
 function buildPrintXml(jpegSize, options) {
@@ -249,7 +284,7 @@ async function scanSubnetForPrinter(prefix) {
           var resp = await conn.sendCommand('<read>\n<path>/config.xml</path>\n</read>', 3000);
           conn.close();
           var model = parseXmlValue(resp, 'model_name');
-          if (model && model.indexOf('VC-500W') >= 0) {
+          if (model && (model.indexOf('VC-500W') >= 0 || model === 'Wedge')) {
             console.log('[scanSubnet] Found VC-500W at ' + results[r] + ' (model=' + model + ')');
             return results[r];
           } else {
@@ -345,8 +380,19 @@ async function discoverPrinter(options) {
     }
   }
 
-  console.log('[discover] Discovery failed. Scanned ' + scannedSubnets + ' subnet(s), no VC-500W found.');
-  return null;
+  // Tier 3: USB fallback
+  console.log('[discover] Tier 3: Trying USB detection...');
+  var usb = require('./driver-usb');
+  try {
+    var devicePath = await usb.findPrinter();
+    console.log('[discover] Found via USB: ' + devicePath);
+    return { method: 'usb', devicePath: devicePath };
+  } catch (e) {
+    console.log('[discover] USB scan failed: ' + e.message);
+  }
+
+  console.log('[discover] Discovery failed. Scanned ' + scannedSubnets + ' subnet(s) and USB, no VC-500W found.');
+  return { error: 'not_found', message: 'Brother VC-500W not found on network or USB. Please check if the printer is powered on, connected to WiFi (same network as this machine), or plugged in via USB.' };
 }
 
 // ---------- Main Driver ----------
@@ -356,11 +402,15 @@ class VC500WDriver {
    * @param {object} [options]
    * @param {string} [options.host] - Printer IP or hostname
    * @param {number} [options.port=9100] - TCP port
+   * @param {string} [options.method] - 'tcp' or 'usb' (default: 'tcp')
+   * @param {string} [options.devicePath] - USB device path (required if method='usb')
    */
   constructor(options) {
     options = options || {};
     this.host = options.host || '';
     this.port = options.port || 9100;
+    this.method = options.method || 'tcp';
+    this.devicePath = options.devicePath || '';
     this.connection = null;
     this.connected = false;
   }
@@ -370,23 +420,40 @@ class VC500WDriver {
    * If no host was provided, attempts auto-discovery.
    */
   async connect() {
+    if (this.method === 'usb') {
+      this.connection = new USBConnection(this.devicePath);
+      await this.connection.connect();
+      this.connected = true;
+      return true;
+    }
+
     if (!this.host) {
       var found = await discoverPrinter();
-      if (!found) {
-        // Fallback: try loading host from config file
+      if (found && found.error) {
+        // Discovery returned a structured error — try config fallback
         try {
           var configRaw = fs.readFileSync(require('path').join(os.homedir(), '.sunburn-app', 'config.json'), 'utf8');
           var config = JSON.parse(configRaw);
-          if (config.printerBrotherHost) {
-            this.host = config.printerBrotherHost;
+          if (config.printerBrotherHost || config.printerIp) {
+            this.host = config.printerBrotherHost || config.printerIp;
           }
         } catch (e) {
           // Config file missing or invalid — ignore
         }
-        if (!this.host) throw new Error('No Brother VC-500W found on the network');
-      } else {
+        if (!this.host) throw new Error(found.message);
+      } else if (found && found.method === 'usb') {
+        // Discovery found printer via USB
+        this.method = 'usb';
+        this.devicePath = found.devicePath;
+        this.connection = new USBConnection(this.devicePath);
+        await this.connection.connect();
+        this.connected = true;
+        return true;
+      } else if (found) {
         this.host = found.host;
         this.port = found.port;
+      } else {
+        throw new Error('No Brother VC-500W found on the network');
       }
     }
 
@@ -411,6 +478,9 @@ class VC500WDriver {
    * @returns {Promise<object>}
    */
   async getConfig() {
+    if (this.method === 'usb') {
+      throw new Error('Not supported over USB');
+    }
     var response = await this.connection.sendCommand(
       '<read>\n<path>/config.xml</path>\n</read>'
     );
@@ -430,6 +500,9 @@ class VC500WDriver {
    * @returns {Promise<object>}
    */
   async getStatus() {
+    if (this.method === 'usb') {
+      throw new Error('Not supported over USB');
+    }
     var response = await this.connection.sendCommand(
       '<read>\n<path>/status.xml</path>\n</read>'
     );
@@ -486,7 +559,11 @@ class VC500WDriver {
     var response = await this.connection.sendPrintJob(printXml, jpegBuffer, 120000);
     var code = parseStatusCode(response);
 
-    if (code === 0) {
+    if (code === 0 && this.method === 'usb') {
+      // USB is fire-and-forget — no close/reconnect/status polling.
+      // Wait ~5s to estimate print+cut time before allowing next job.
+      await new Promise(function (r) { setTimeout(r, 5000); });
+    } else if (code === 0) {
       // Close TCP to trigger cut cycle
       this.connection.close();
       this.connection = null;
@@ -562,6 +639,7 @@ class VC500WDriver {
 module.exports = {
   VC500WDriver: VC500WDriver,
   TCPConnection: TCPConnection,
+  USBConnection: USBConnection,
   discoverPrinter: discoverPrinter,
   scanSubnetForPrinter: scanSubnetForPrinter,
   buildPrintXml: buildPrintXml,
