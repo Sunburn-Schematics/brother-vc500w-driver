@@ -1,6 +1,6 @@
 {
   "schema": "brother-v13-initialization-aggregate-v1",
-  "status": "LIVE_INITIALIZATION_ACCEPTED_TEN_COMPLETED_ONE_UNCERTAIN",
+  "status": "ELEVEN_LABELS_PRINTED_TEN_OWNER_VERIFIED_FINAL_USER_CONFIRMED",
   "template_source": "Existing v12-twelve-print-validation.json aggregate convention; redacted owner status and root-observed V13 control outcomes",
   "observed_utc": "2026-11-18T17:02:26.039059+00:00",
   "firmware": {
@@ -24,8 +24,8 @@
     "start_fault_code": 0
   },
   "pending": [
-    "physical completion of the eleventh label",
-    "printer/network stall root cause and recovery",
+    "owner status-channel recovery and printer/network stall root cause",
+    "usage-write/readback telemetry for the physically confirmed final label",
     "subsequent detach/checkpoint outcome",
     "active power-loss durability",
     "full-roll endurance"
@@ -40,7 +40,8 @@
     "before_backing_snapshot_source": "191ffc39efa1596309f76e47c54ca59add25b9c46d51eb582502af2285bedaf1",
     "after_backing_snapshot_source": "50ce837a5bd0d10e347cc665af5c6df5340fbafbe7579e70a0dff437bcde48ed",
     "after_advertised_snapshot_source": "80951e097f188cd2973250417a6ed0b1dd2c4ecb19d3a5033f6a8db0629b11ff",
-    "later_repeat_emulator_receipt_source": "c67857b4798e1169175f40882809ece9d05aa6fb3de5926322d1ee558cae27a4"
+    "later_repeat_emulator_receipt_source": "c67857b4798e1169175f40882809ece9d05aa6fb3de5926322d1ee558cae27a4",
+    "human_confirmation_and_followup_owner_source": "0ceaf16fca6db92fc9a1c250c555538c782fdfe341a9a19592e77f6c126a8f7a"
   },
   "redactions": [
     "printer serial",
@@ -50,7 +51,7 @@
     "full EEPROM image",
     "part labels"
   ],
-  "scope": "Derived initialization and print evidence, with ten confirmed completions and one uncertain job. Root operated hardware; public portable host adaptation has offline coverage only. Virtual length is not a measurement of physical tape.",
+  "scope": "Derived initialization and print evidence: eleven labels printed, ten with owner-confirmed completion and the final label with subsequent human confirmation. The saved final owner result remains uncertain, and UART evidence covers ten usage cycles. Root operated hardware; public portable host adaptation has offline coverage only. Virtual length is not a measurement of physical tape.",
   "initial_owner_status": {
     "state": "IDLE",
     "stage": "READY FOR PRINT",
@@ -186,7 +187,15 @@
       ],
       "reason": "Status unavailable after submission; completion unknown",
       "image_replayed": false,
-      "physical_completion_confirmed": false
+      "physical_completion_confirmed": true,
+      "physical_completion_confirmation_source": "Subsequent explicit human confirmation",
+      "physical_confirmation_recorded_utc": "2026-11-18T19:07:56.449524+00:00"
+    },
+    "physically_printed_jobs": 11,
+    "completion_evidence": {
+      "owner_verified_and_settled": 10,
+      "final_label_user_confirmation": 1,
+      "owner_results_rewritten": false
     }
   },
   "emulator_before_prints": {
@@ -272,7 +281,7 @@
     "verification_reads": 10,
     "refresh_events": 0
   },
-  "aggregate_interpretation": "Consistent with ten cycles of two eight-byte page writes and two sixteen-byte reads. Cumulative counters do not provide a payload log of every transaction or corroborate completion of the eleventh job.",
+  "aggregate_interpretation": "Consistent with ten cycles of two eight-byte page writes and two sixteen-byte reads. The final label was later confirmed physically complete by the user, but that does not add an eleventh observed write/readback cycle or settle the original owner completion telemetry.",
   "durability": "The final sample was active and dirty: live generation63, durable generation43. Latest page writes were in RAM. No post-run successful detach/checkpoint or active power-loss durability is claimed.",
   "later_owner_observations": {
     "status_utc": "2026-11-18T17:16:56.545064+00:00",
@@ -285,15 +294,28 @@
     "explicit_wifi_reconnect_message": "Connection failed: Connection timeout",
     "subsequent_root_reported_ping_utc_minute": "2026-11-18T17:18Z",
     "subsequent_ping_reply_received": false,
-    "cause": "Unresolved printer/network stall; neither WiFi-only cause nor emulator fault established."
+    "cause": "Unresolved printer/network stall; neither WiFi-only cause nor emulator fault established.",
+    "followup": {
+      "observed_utc": "2026-11-18T19:07:56.449524+00:00",
+      "connected": false,
+      "state": "UNKNOWN",
+      "queue_state": "idle",
+      "queued": 0,
+      "additional_print_jobs_recorded": 0,
+      "desktop_health_ok": true,
+      "new_requested_batch_reconnect_error_reported": true,
+      "network_root_cause_resolved": false
+    }
   },
   "physical_observation": {
     "tenth_label_visible_at_output": true,
     "later_camera_attached_strip_visible": true,
-    "last_label_physical_completion_confirmed": false,
+    "last_label_physical_completion_confirmed": true,
     "source": "Root camera observation; labels and photographs are not copied into this aggregate.",
     "later_camera_tenth_label_still_visible": true,
-    "later_camera_strip_movement_observed": false
+    "later_camera_strip_movement_observed": false,
+    "final_label_confirmation_source": "Subsequent explicit human confirmation, recorded separately from the prior camera and owner observations",
+    "final_label_confirmation_recorded_utc": "2026-11-18T19:07:56.449524+00:00"
   },
   "independent_local_checks": {
     "frame_raw_pairs_equal": 15,

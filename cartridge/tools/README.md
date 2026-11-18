@@ -159,8 +159,9 @@ directory does not relicense or redistribute those packages.
 `policy-enable`, `policy-disable` and the original-event-only `recover-stop`.
 The [V13 policy guide](../../docs/cartridge-v13-budget.md) describes the separate
 advertised image, exact image/generation guards and accepted live initialization.
-Ten website jobs completed with verification; an eleventh remains uncertain
-after status loss. The guide records the full result and remaining limits.
+Eleven labels printed: ten had verified owner completion, and the user confirmed
+the final label after status loss. Its saved owner result and missing usage-write
+telemetry remain unresolved. The guide records the full result and limits.
 The default build and earlier V12 source remain unchanged.
 
 Policy is explicit, volatile and OFF after boot. Enable takes
@@ -177,3 +178,12 @@ other V13 tests use synthetic images. Recovery remains limited to its exact
 private failed-STOP/checkpoint bundle. Missing proof is never replaced with a
 synthetic or edited cartridge identity. Public host portability adaptations have
 offline coverage and have not themselves been requalified on hardware.
+
+## V14 checkpoint-recovery candidate
+
+`manage_emulator_v14.py` matches only `i2c-eeprom-emulator-v14` and the new exact
+generation-63 STOP/diagnostic proof. The [V14 guide](../../docs/cartridge-v14-recovery.md)
+records successful live metadata recovery and initialization, with new V14
+prints pending. Four private-proof replay tests are opt-in; other tests use
+synthetic inputs. No generic fault
+clear, counter reset or automatic rescan is added. V12 remains the default build.

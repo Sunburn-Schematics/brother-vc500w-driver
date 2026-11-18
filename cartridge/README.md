@@ -11,9 +11,15 @@ with known failures. Their versioned host tools intentionally check matching
 firmware identities. Do not weaken those checks to combine arbitrary versions.
 
 [V13's initialization-budget policy](../docs/cartridge-v13-budget.md) has passed
-its live initialization check and ten verified website print jobs. An eleventh
-job remains uncertain after status loss; the linked guide records the limits.
+its live initialization check. Eleven labels printed: ten had verified owner
+completion, and the user confirmed the final label after its status timeout.
+The saved final owner result remains uncertain; the linked guide records the
+limits.
 Its source and offline tests are included separately. V12 remains the default.
+
+[V14](../docs/cartridge-v14-recovery.md) adds recovery of one exact saved STOP
+checkpoint. Live metadata recovery and printer initialization passed; new V14
+prints remain pending.
 
 | Directory | Contents |
 | --- | --- |

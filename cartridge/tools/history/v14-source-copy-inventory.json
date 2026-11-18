@@ -1,0 +1,315 @@
+{
+  "schema": "brother-v14-public-source-copy-v1",
+  "template_source": "Existing V13 public source-copy inventory, portable CLI and private_replay test convention",
+  "created_utc": "2026-11-18T19:25:06.076564+00:00",
+  "firmware_default": "eeprom_emulator_v12",
+  "firmware_revision": "i2c-eeprom-emulator-v14",
+  "firmware_bytes_unchanged": true,
+  "live_status": "PENDING",
+  "private_proof_or_full_images_distributed": false,
+  "public_host_hardware_requalified": false,
+  "source_review_receipt_sha256": "90957a40db4beba6f56d780baa8d6e255dde2cfc1f5fbe568182b78cab3d3731",
+  "offline_binary_review_receipt_sha256": "db60ba417144d4ebd60757f343a560899fdfd936137acdd83e7d5357b8b742ed",
+  "historical_interface_note": "Frozen inherited INTERFACE retains a historical laboratory COM49 reference; public host port selection is explicit and portable.",
+  "entries": [
+    {
+      "source": "firmware/eeprom_emulator_v14/INTERFACE.txt",
+      "destination": "firmware/eeprom_emulator_v14/INTERFACE.txt",
+      "source_sha256": "e218e860dad91b1a3ffce999c6e27af0fbdd135a6f10cda0bf0986f0c6875153",
+      "public_sha256": "e218e860dad91b1a3ffce999c6e27af0fbdd135a6f10cda0bf0986f0c6875153",
+      "byte_identical": true,
+      "public_bytes": 32128,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/adoption_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/adoption_rules.h",
+      "source_sha256": "6dbf87a9011490ac9a19167bd1b644d35a847be8c6b9b7147e33ae721abb4c69",
+      "public_sha256": "6dbf87a9011490ac9a19167bd1b644d35a847be8c6b9b7147e33ae721abb4c69",
+      "byte_identical": true,
+      "public_bytes": 728,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/bench_commands.h",
+      "destination": "firmware/eeprom_emulator_v14/bench_commands.h",
+      "source_sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1",
+      "public_sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1",
+      "byte_identical": true,
+      "public_bytes": 9488,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/bench_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/bench_rules.h",
+      "source_sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e",
+      "public_sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e",
+      "byte_identical": true,
+      "public_bytes": 7247,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/control_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/control_rules.h",
+      "source_sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e",
+      "public_sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e",
+      "byte_identical": true,
+      "public_bytes": 1994,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/detached_diag.h",
+      "destination": "firmware/eeprom_emulator_v14/detached_diag.h",
+      "source_sha256": "3abdd48685b0ba608494ca17cc75800203a48e7ef0bc7fb9de85c5ca99c879b7",
+      "public_sha256": "3abdd48685b0ba608494ca17cc75800203a48e7ef0bc7fb9de85c5ca99c879b7",
+      "byte_identical": true,
+      "public_bytes": 5971,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/eeprom_emulator_v14.ino",
+      "destination": "firmware/eeprom_emulator_v14/eeprom_emulator_v14.ino",
+      "source_sha256": "0ad5db5287b6aba04d9a1fb6d0b7ab2ba373a931943465c47afea6fe4306bdc8",
+      "public_sha256": "0ad5db5287b6aba04d9a1fb6d0b7ab2ba373a931943465c47afea6fe4306bdc8",
+      "byte_identical": true,
+      "public_bytes": 30757,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/eeprom_model.h",
+      "destination": "firmware/eeprom_emulator_v14/eeprom_model.h",
+      "source_sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a",
+      "public_sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a",
+      "byte_identical": true,
+      "public_bytes": 2888,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/emulator_commands.h",
+      "destination": "firmware/eeprom_emulator_v14/emulator_commands.h",
+      "source_sha256": "cc25312aeff72588be911ab31c86b721f5c6bce6f1ccec190a6d3f7a42d51bd0",
+      "public_sha256": "cc25312aeff72588be911ab31c86b721f5c6bce6f1ccec190a6d3f7a42d51bd0",
+      "byte_identical": true,
+      "public_bytes": 21912,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/emulator_hw.h",
+      "destination": "firmware/eeprom_emulator_v14/emulator_hw.h",
+      "source_sha256": "590beeb9b0fa6c2cb6ede80eacefc5fe1054a2f2c6527bc193adcfe5000f95b6",
+      "public_sha256": "590beeb9b0fa6c2cb6ede80eacefc5fe1054a2f2c6527bc193adcfe5000f95b6",
+      "byte_identical": true,
+      "public_bytes": 15572,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/irq_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/irq_rules.h",
+      "source_sha256": "90982b9223a9abd18f4f9ddb1630d89784ac56749aef9d16127869085dc3281c",
+      "public_sha256": "90982b9223a9abd18f4f9ddb1630d89784ac56749aef9d16127869085dc3281c",
+      "byte_identical": true,
+      "public_bytes": 617,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/policy_commands.h",
+      "destination": "firmware/eeprom_emulator_v14/policy_commands.h",
+      "source_sha256": "9aba0ae737a4c99784ea8e1d4c10e7d9b1ff32f899c0946181a4e58c6353563a",
+      "public_sha256": "9aba0ae737a4c99784ea8e1d4c10e7d9b1ff32f899c0946181a4e58c6353563a",
+      "byte_identical": true,
+      "public_bytes": 6291,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/poll_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/poll_rules.h",
+      "source_sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732",
+      "public_sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732",
+      "byte_identical": true,
+      "public_bytes": 1079,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/pullup_control.h",
+      "destination": "firmware/eeprom_emulator_v14/pullup_control.h",
+      "source_sha256": "98a32885445f315a44b887a24eec158590af4e3913af0d1cd071956c2ae4583e",
+      "public_sha256": "98a32885445f315a44b887a24eec158590af4e3913af0d1cd071956c2ae4583e",
+      "byte_identical": true,
+      "public_bytes": 3070,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/read_accounting.h",
+      "destination": "firmware/eeprom_emulator_v14/read_accounting.h",
+      "source_sha256": "9b57429d947ee58e93de944d69bbb21976afabd9b455af6761e48192c77cb906",
+      "public_sha256": "9b57429d947ee58e93de944d69bbb21976afabd9b455af6761e48192c77cb906",
+      "byte_identical": true,
+      "public_bytes": 677,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/read_recovery_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/read_recovery_rules.h",
+      "source_sha256": "c74128975c4b9669d0e3f643f8a7f24b75fdf46c8130028863bd75141c5a41c9",
+      "public_sha256": "c74128975c4b9669d0e3f643f8a7f24b75fdf46c8130028863bd75141c5a41c9",
+      "byte_identical": true,
+      "public_bytes": 289,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/recovery_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/recovery_rules.h",
+      "source_sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac",
+      "public_sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac",
+      "byte_identical": true,
+      "public_bytes": 696,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/stop_checkpoint_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/stop_checkpoint_rules.h",
+      "source_sha256": "8d36b5aeb1615909719dbdbc4fa57503d299660ad081bb5acb458b5df7e6a0dc",
+      "public_sha256": "8d36b5aeb1615909719dbdbc4fa57503d299660ad081bb5acb458b5df7e6a0dc",
+      "byte_identical": true,
+      "public_bytes": 514,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/v10_commands.h",
+      "destination": "firmware/eeprom_emulator_v14/v10_commands.h",
+      "source_sha256": "e31b25b94dd87babcbe400f6c7b3fd5ea2a21ca6deac82e53590b7bf9d8b40e9",
+      "public_sha256": "e31b25b94dd87babcbe400f6c7b3fd5ea2a21ca6deac82e53590b7bf9d8b40e9",
+      "byte_identical": true,
+      "public_bytes": 5439,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/v10_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/v10_rules.h",
+      "source_sha256": "e3be4be1ed4b37dfcd22e5553c710ea6623aee68a57ee57ea2ea2ba59d2aa8c2",
+      "public_sha256": "e3be4be1ed4b37dfcd22e5553c710ea6623aee68a57ee57ea2ea2ba59d2aa8c2",
+      "byte_identical": true,
+      "public_bytes": 928,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/v11_commands.h",
+      "destination": "firmware/eeprom_emulator_v14/v11_commands.h",
+      "source_sha256": "9b053b0e8cf2085d60aaecbf151fb97a5694bd431c9bb431fcf5896557dfd689",
+      "public_sha256": "9b053b0e8cf2085d60aaecbf151fb97a5694bd431c9bb431fcf5896557dfd689",
+      "byte_identical": true,
+      "public_bytes": 1554,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/v12_commands.h",
+      "destination": "firmware/eeprom_emulator_v14/v12_commands.h",
+      "source_sha256": "c32b7916469a259ff5b3a874de06453b6096fcb66e2eaeced99cfc2188732085",
+      "public_sha256": "c32b7916469a259ff5b3a874de06453b6096fcb66e2eaeced99cfc2188732085",
+      "byte_identical": true,
+      "public_bytes": 1600,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/virtual_paper_policy.h",
+      "destination": "firmware/eeprom_emulator_v14/virtual_paper_policy.h",
+      "source_sha256": "9f6224d89711945f043edff4228d561469cd9ac334a231ea431ebddeeb03da89",
+      "public_sha256": "9f6224d89711945f043edff4228d561469cd9ac334a231ea431ebddeeb03da89",
+      "byte_identical": true,
+      "public_bytes": 7903,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/write_evidence.h",
+      "destination": "firmware/eeprom_emulator_v14/write_evidence.h",
+      "source_sha256": "227b3eda033365fddf6866e5c35dbb5942c22fdfae971aa726cfac050f08f122",
+      "public_sha256": "227b3eda033365fddf6866e5c35dbb5942c22fdfae971aa726cfac050f08f122",
+      "byte_identical": true,
+      "public_bytes": 1461,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/write_evidence_output.h",
+      "destination": "firmware/eeprom_emulator_v14/write_evidence_output.h",
+      "source_sha256": "43a4e248f22f36167cc737f7dbc8f0ee52e20f081f8c3fb209c298d8a23034fd",
+      "public_sha256": "43a4e248f22f36167cc737f7dbc8f0ee52e20f081f8c3fb209c298d8a23034fd",
+      "byte_identical": true,
+      "public_bytes": 1719,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/write_recovery_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/write_recovery_rules.h",
+      "source_sha256": "60da02394112dc4bcc46fde7f0c0a99d8e75dddb0ec16ed68fe360a86d836aab",
+      "public_sha256": "60da02394112dc4bcc46fde7f0c0a99d8e75dddb0ec16ed68fe360a86d836aab",
+      "byte_identical": true,
+      "public_bytes": 290,
+      "public_change": "none"
+    },
+    {
+      "source": "firmware/eeprom_emulator_v14/write_rules.h",
+      "destination": "firmware/eeprom_emulator_v14/write_rules.h",
+      "source_sha256": "eeec8218410dad4810ffef928cbe52f4c6db84323026ee50a52a441f5537cdbb",
+      "public_sha256": "eeec8218410dad4810ffef928cbe52f4c6db84323026ee50a52a441f5537cdbb",
+      "byte_identical": true,
+      "public_bytes": 1332,
+      "public_change": "none"
+    },
+    {
+      "source": "toolchain/test_v14_policy.cpp",
+      "destination": "tests/test_v14_policy.cpp",
+      "source_sha256": "ad924f4cdd7e7400b1851696b2803d56d3cbbc89f3d7032dec80d782d2f2bb09",
+      "public_sha256": "ad924f4cdd7e7400b1851696b2803d56d3cbbc89f3d7032dec80d782d2f2bb09",
+      "byte_identical": true,
+      "public_bytes": 12823,
+      "public_change": "none; relative includes already match public layout"
+    },
+    {
+      "source": "toolchain/test_v14_stop_checkpoint.cpp",
+      "destination": "tests/test_v14_stop_checkpoint.cpp",
+      "source_sha256": "09c07695732ea47bcc83a55a63268e31cef27dd33751bba5653331fc93353194",
+      "public_sha256": "09c07695732ea47bcc83a55a63268e31cef27dd33751bba5653331fc93353194",
+      "byte_identical": true,
+      "public_bytes": 2174,
+      "public_change": "none; relative includes already match public layout"
+    },
+    {
+      "source": "tools/manage_emulator_v14.py",
+      "destination": "tools/manage_emulator_v14.py",
+      "source_sha256": "c6d9beb1717291517027a7755d910842fd9b6bc87b0cf269447ba6b91eeadce4",
+      "public_sha256": "76a871e1f1535110a580862fe4d37ec5fc70dde19aa2c9541b16b3c7d8c1b23e",
+      "byte_identical": false,
+      "public_bytes": 51369,
+      "public_change": "Remove only COM49 and 0001 argparse choices; explicit CP210x, serial, ELF, fullimage, generation and protocol guards remain."
+    },
+    {
+      "source": "tools/test_manage_emulator_v14.py",
+      "destination": "tests/test_manage_emulator_v14.py",
+      "source_sha256": "121bdf3ea62ec6c300f0d848de5e3e2ff337908d030bc98d96d987b3cf142c8a",
+      "public_sha256": "65b16f0c81abb5d9950d5566fdaeaddf6657348bca154a1377509c7cf90ea4f5",
+      "byte_identical": false,
+      "public_bytes": 17080,
+      "public_change": "Use existing private_replay opt-in for four actual-event proof cases; synthetic tests unchanged."
+    }
+  ],
+  "offline_validation": {
+    "public_default_tests": {
+      "run": 16,
+      "pass": 12,
+      "explicit_private_proof_skips": 4
+    },
+    "public_explicit_private_replay": {
+      "run": 16,
+      "pass": 16,
+      "skips": 0
+    },
+    "new_native_assertions": [
+      651,
+      42
+    ],
+    "firmware_source_hash_entries_verified": 175,
+    "ruff_new_python_check_and_format": "PASS",
+    "git_diff_check": "PASS",
+    "hardware_or_network_actions": "none"
+  }
+}

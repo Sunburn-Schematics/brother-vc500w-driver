@@ -1,0 +1,170 @@
+{
+  "schema": "brother-v14-recovery-validation-v1",
+  "status": "LIVE_METADATA_RECOVERY_AND_INITIALIZATION_ACCEPTED_NEW_PRINTS_PENDING",
+  "template_source": "Existing V13 redacted validation aggregate and versioned recovery documentation",
+  "firmware": {
+    "revision": "i2c-eeprom-emulator-v14",
+    "app_bytes": 821728,
+    "app_sha256": "bd35b4cd556c2680084185daf2cbceca7a682c6dd27b752096676ed2ad8a1810",
+    "elf_sha256": "82b80acb9be16c792ac9c48d8e56c715f11c19aabf27cba25e5a44589fb41a04"
+  },
+  "delta": "Revision and exact generation63 metadata-recovery pin only; no EEPROM model, STOP, ISR, D19, updater or initialization-budget behavior change",
+  "historical_checkpoint": {
+    "source_firmware": "i2c-eeprom-emulator-v13",
+    "stop_ok": false,
+    "stop_fault_code": 9,
+    "stop_fault": "stop_timeout",
+    "before_after_full_image_identical": true,
+    "generation": 63,
+    "durable_generation": 63,
+    "dirty": false,
+    "closed": true,
+    "session_marker": false,
+    "d19_off": true,
+    "subsequent_detached_diag_passed_fault_retained": true,
+    "uncommitted_bus_activity_not_excluded": true,
+    "stop_raw_frames": 6,
+    "diag_raw_frames": 12
+  },
+  "recovery_scope": {
+    "event_specific_private_proof_required": true,
+    "generic_fault_clear": false,
+    "image_counter_or_generation_mutation": false,
+    "runtime_policy_must_be_off": true,
+    "old_generation43_recovery_rejected": true
+  },
+  "live": {
+    "recovery": "PASS_METADATA_ONLY",
+    "rearm": "PASS",
+    "printer_acceptance": "PASS_TWO_FRESH_UNCACHED_SAMPLES",
+    "new_prints": "PENDING_NOT_CLAIMED"
+  },
+  "source_receipt_sha256": {
+    "offline_source_review": "90957a40db4beba6f56d780baa8d6e255dde2cfc1f5fbe568182b78cab3d3731",
+    "offline_binary_review": "db60ba417144d4ebd60757f343a560899fdfd936137acdd83e7d5357b8b742ed",
+    "offline_host_review": "2c766c38fba187829066bc1f7559852c568a841948d5977ac4565d2b2878ac69",
+    "live_passive_boot": "1e6898330d6092531e283b6b30fb3280a98d7889083f834ce264d63473de73bf",
+    "live_metadata_recovery": "790fc6a9037148b3233f7cfa8c3fde43df0b95307616ffd246c1ace9d539be51",
+    "live_policy_enable": "9454fedfa28568438ee2b147750962cfd8a019976fb68b35d42ff83ad734cee0",
+    "live_start_pullup": "83ad81bd52f71b36f4855dcd01c81b0b79201c81abd5ddb780609890339624ca",
+    "live_initialized_status_snapshot": "791b35ba5b22f4cb7a1ec0ca4fc572cab4f9177b0c8d2cf97b62041d345d253a",
+    "fresh_owner_monitor": "c69f7e82d94cfd36dd3fe0992c69cc7058474732c29a2ece56f3267349c67bae"
+  },
+  "redactions": [
+    "printer and USB serials",
+    "network addresses",
+    "private host paths",
+    "credentials",
+    "raw UART evidence",
+    "full EEPROM images",
+    "part labels"
+  ],
+  "limitations": [
+    "public portable host adaptation has offline coverage only",
+    "policy is volatile and defaults OFF",
+    "backing writes remain RAM updates until a verified checkpoint",
+    "no whole-roll endurance or active power-loss durability claim",
+    "V13 final physical confirmation does not add an eleventh UART usage cycle",
+    "printer/network stall root cause unresolved",
+    "new V14 prints and a subsequent post-use checkpoint remain pending"
+  ],
+  "default_build": "eeprom_emulator_v12",
+  "metadata_recovery": {
+    "before_fault_code": 9,
+    "after_fault_code": 0,
+    "full_backing_bytes_unchanged": true,
+    "before_and_after_image_sha256": "50ce837a5bd0d10e347cc665af5c6df5340fbafbe7579e70a0dff437bcde48ed",
+    "live_generation_before_and_after": 63,
+    "durable_generation_before_and_after": 63,
+    "dirty_after": false,
+    "policy_off_after_boot_and_recovery": true,
+    "historical_failed_stop_reinterpreted_as_success": false
+  },
+  "policy_enable": {
+    "backing_image_unchanged": true,
+    "capacity_counts": 11232,
+    "initial_advertised_counts": 11232,
+    "remaining_advertised_counts": 11232,
+    "persisted": false
+  },
+  "after_initialization": {
+    "emulation_active": true,
+    "fault_code": 0,
+    "backing_image_sha256": "50ce837a5bd0d10e347cc665af5c6df5340fbafbe7579e70a0dff437bcde48ed",
+    "backing_initial_counts": 6299,
+    "backing_remaining_counts": 10868,
+    "live_generation": 63,
+    "durable_generation": 63,
+    "dirty": false,
+    "backing_all_three_crcs_valid": true,
+    "advertised_all_three_crcs_valid": true,
+    "view_generation": 65,
+    "advertised_initial_counts": 11232,
+    "advertised_remaining_counts": 11232,
+    "initialization_reads": 1,
+    "last_init_read_bytes": 256,
+    "refresh_events": 2,
+    "verification_reads": 0,
+    "cache_refresh_required": false,
+    "write_verification_pending": false,
+    "d19_on": true,
+    "metrics": {
+      "rx_bytes": 1,
+      "tx_completed_bytes": 256,
+      "tx_prefetched_bytes": 352,
+      "byte_irqs": 4,
+      "starts": 0,
+      "stops": 1,
+      "nacks": 1,
+      "rx_overflows": 0,
+      "tx_underflows": 0,
+      "fifo_accounting_errors": 0,
+      "max_isr_cycles": 2359,
+      "last_hw_status": 109051906,
+      "invalid_stops": 0
+    }
+  },
+  "owner_samples": [
+    {
+      "observed_utc": "2026-11-18T19:26:28.645023+00:00",
+      "connected": true,
+      "state": "IDLE",
+      "stage": "READY FOR PRINT",
+      "error": "NONE",
+      "cached": false,
+      "busy": false,
+      "tapeType": "3/4",
+      "tapeLengthMm": 8915.4,
+      "tapeRemainingMm": 8915.4
+    },
+    {
+      "observed_utc": "2026-11-18T19:26:31.929055+00:00",
+      "connected": true,
+      "state": "IDLE",
+      "stage": "READY FOR PRINT",
+      "error": "NONE",
+      "cached": false,
+      "busy": false,
+      "tapeType": "3/4",
+      "tapeLengthMm": 8915.4,
+      "tapeRemainingMm": 8915.4
+    }
+  ],
+  "printer_power_cycle": {
+    "reported_power_button_unresponsive": true,
+    "unplugging_and_restoring_power_restored_wifi_before_rearm": true,
+    "stall_or_stop_timeout_root_cause_proven": false
+  },
+  "independent_local_checks": {
+    "raw_frame_pairs_equal": 37,
+    "full_image_saved_bytes_hashes_and_all_crc_regions_checked": 11
+  },
+  "public_offline_validation": {
+    "python_suite_total": 281,
+    "python_suite_passed": 215,
+    "explicit_private_evidence_skips": 66,
+    "native_harnesses_passed": 15,
+    "firmware_source_hash_entries_verified": 175,
+    "new_v14_tests_with_explicit_private_bundle_passed": 16
+  }
+}

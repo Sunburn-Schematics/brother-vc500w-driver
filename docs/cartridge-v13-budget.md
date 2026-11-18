@@ -1,7 +1,7 @@
 # V13: a virtual budget at cartridge initialization
 
-**V13 accepted the virtual budget and completed ten website print jobs. An
-eleventh job remains uncertain.**
+**Eleven labels printed with V13: ten had verified owner completion, and the
+user confirmed the final label printed completely after its status timeout.**
 At 17:02:26 UTC on 18 November 2026, a fresh uncached printer status reported
 `IDLE`, `READY FOR PRINT`, error `NONE`, and 8915.4 mm initial and remaining
 length with the V13 responder. See the [redacted initialization and print
@@ -119,9 +119,10 @@ idle. The tenth label was visible at the output in the camera view.
 
 The eleventh job received a submission ACK and reached `PRINTING` and `EJECTING`,
 but status feedback then disappeared. The owner timed out after about 60 seconds
-and recorded completion as uncertain. It did not replay the label. Physical
-completion of that final label remains unconfirmed; an ACK or reported length
-decrease does not settle it.
+and recorded completion as uncertain. It did not replay the label. The user
+subsequently confirmed that this final label printed completely. That human
+confirmation establishes physical output; it does not change the saved owner's
+uncertain result or supply missing usage-write and completion telemetry.
 
 The post-run emulator snapshot had no fault and valid CRCs in both full images.
 Its counters matched ten normal write/readback cycles: backing generation rose
@@ -136,8 +137,12 @@ A later owner status was disconnected/`UNKNOWN` with an idle queue. A supported
 Wi-Fi reconnect timed out, and a subsequent ping received no reply. The cause of
 the printer/network stall remains unresolved. These observations do not establish
 a Wi-Fi-only root cause or an emulator failure. The camera still showed an
-attached strip. Subsequent recovery, final-label confirmation and a clean
-detach/checkpoint must be recorded separately.
+attached strip. At 19:07:56 UTC, the owner was still disconnected/`UNKNOWN`, its
+queue was idle, and no additional print jobs had been recorded. The desktop
+service was responding. A later requested batch encountered a reconnect error;
+it is not another demonstrated print run. Status-channel recovery, the final
+label's missing usage-write telemetry and a clean detach/checkpoint remain
+separate work.
 
 Physical media-end sensing, full-roll use, arbitrary bus masters, interrupted
 transactions and EEPROM-like power-loss persistence remain separate tests.
