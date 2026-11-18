@@ -11,9 +11,9 @@ with known failures. Their versioned host tools intentionally check matching
 firmware identities. Do not weaken those checks to combine arbitrary versions.
 
 [V13's initialization-budget policy](../docs/cartridge-v13-budget.md) has passed
-its first live initialization check; new V13 print verification remains pending.
-Its source and offline tests are included separately. V12 remains the default
-build and completed print baseline.
+its live initialization check and ten verified website print jobs. An eleventh
+job remains uncertain after status loss; the linked guide records the limits.
+Its source and offline tests are included separately. V12 remains the default.
 
 | Directory | Contents |
 | --- | --- |

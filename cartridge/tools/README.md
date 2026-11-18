@@ -159,7 +159,8 @@ directory does not relicense or redistribute those packages.
 `policy-enable`, `policy-disable` and the original-event-only `recover-stop`.
 The [V13 policy guide](../../docs/cartridge-v13-budget.md) describes the separate
 advertised image, exact image/generation guards and accepted live initialization.
-New V13 print verification remains pending.
+Ten website jobs completed with verification; an eleventh remains uncertain
+after status loss. The guide records the full result and remaining limits.
 The default build and earlier V12 source remain unchanged.
 
 Policy is explicit, volatile and OFF after boot. Enable takes

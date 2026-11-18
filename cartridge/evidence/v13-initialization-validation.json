@@ -1,6 +1,6 @@
 {
   "schema": "brother-v13-initialization-aggregate-v1",
-  "status": "LIVE_INITIALIZATION_ACCEPTED_NEW_V13_PRINT_VERIFICATION_PENDING",
+  "status": "LIVE_INITIALIZATION_ACCEPTED_TEN_COMPLETED_ONE_UNCERTAIN",
   "template_source": "Existing v12-twelve-print-validation.json aggregate convention; redacted owner status and root-observed V13 control outcomes",
   "observed_utc": "2026-11-18T17:02:26.039059+00:00",
   "firmware": {
@@ -8,16 +8,6 @@
     "app_bytes": 821728,
     "app_sha256": "ba2044f547a197feba0ec2ba08516b84b3ecce751f680bc5b0cef280afed172c",
     "elf_sha256": "cd12ca766d844df5d618c485b7fa301b5f4a43e9778bc48021d82c718d5d26b3"
-  },
-  "owner_status": {
-    "state": "IDLE",
-    "stage": "READY FOR PRINT",
-    "error": "NONE",
-    "cached": false,
-    "busy": false,
-    "tapeType": "3/4",
-    "tapeLengthMm": 8915.4,
-    "tapeRemainingMm": 8915.4
   },
   "pre_enable_backing": {
     "generation": 43,
@@ -34,15 +24,23 @@
     "start_fault_code": 0
   },
   "pending": [
-    "new V13 print outcome",
-    "normal usage write and exact readback verification under V13 policy",
-    "post-use full image and CRC verification",
+    "physical completion of the eleventh label",
+    "printer/network stall root cause and recovery",
     "subsequent detach/checkpoint outcome",
+    "active power-loss durability",
     "full-roll endurance"
   ],
   "source_sha256": {
     "redacted_owner_status_source": "78325b476cdb45a179a0d935de9c3ad99fd9e4951a301e490a003a5b81cd1ee3",
-    "offline_binary_review_source": "35baac43de723f15986b2e56ddbcb2553afe85d2cf0d71eac6a33f8dcdb10d4a"
+    "offline_binary_review_source": "35baac43de723f15986b2e56ddbcb2553afe85d2cf0d71eac6a33f8dcdb10d4a",
+    "after_jobs_and_owner_source": "b6d75eca79a661a9d7c705f12a8ab7ea14d988974c5d6677a2c32c4b4097a8ac",
+    "explicit_reconnect_source": "be42f87b48052db8b07179190c9bdb0feca96dd5ff3902844ea0e8534c415ec7",
+    "before_emulator_receipt_source": "51163c0855e1cbaf0d60108b83dad4278f9e071862deee69ea79e57f427ad53c",
+    "after_emulator_receipt_source": "c67857b4798e1169175f40882809ece9d05aa6fb3de5926322d1ee558cae27a4",
+    "before_backing_snapshot_source": "191ffc39efa1596309f76e47c54ca59add25b9c46d51eb582502af2285bedaf1",
+    "after_backing_snapshot_source": "50ce837a5bd0d10e347cc665af5c6df5340fbafbe7579e70a0dff437bcde48ed",
+    "after_advertised_snapshot_source": "80951e097f188cd2973250417a6ed0b1dd2c4ecb19d3a5033f6a8db0629b11ff",
+    "later_repeat_emulator_receipt_source": "c67857b4798e1169175f40882809ece9d05aa6fb3de5926322d1ee558cae27a4"
   },
   "redactions": [
     "printer serial",
@@ -52,5 +50,254 @@
     "full EEPROM image",
     "part labels"
   ],
-  "scope": "Derived initialization evidence only; root operated hardware, public portable host adaptation has offline coverage only. A virtual length does not measure physical media."
+  "scope": "Derived initialization and print evidence, with ten confirmed completions and one uncertain job. Root operated hardware; public portable host adaptation has offline coverage only. Virtual length is not a measurement of physical tape.",
+  "initial_owner_status": {
+    "state": "IDLE",
+    "stage": "READY FOR PRINT",
+    "error": "NONE",
+    "cached": false,
+    "busy": false,
+    "tapeType": "3/4",
+    "tapeLengthMm": 8915.4,
+    "tapeRemainingMm": 8915.4
+  },
+  "owner_print_results": {
+    "submitted_jobs": 11,
+    "completed_verified_settled_jobs": 10,
+    "uncertain_jobs": 1,
+    "all_copies": 1,
+    "all_cut_mode": "half",
+    "all_quality": "vivid",
+    "first_submission_utc": "2026-11-18T17:06:41.138Z",
+    "last_submission_utc": "2026-11-18T17:11:21.812Z",
+    "completed_jobs": [
+      {
+        "ordinal": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 33037,
+        "reported_tape_used_mm": 32.258
+      },
+      {
+        "ordinal": 2,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 24863,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 3,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 21813,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 4,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22099,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 5,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 21917,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 6,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22105,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 7,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 21813,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 8,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22760,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 9,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 23349,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 10,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22505,
+        "reported_tape_used_mm": 28.448
+      }
+    ],
+    "last_job": {
+      "ordinal": 11,
+      "status": "uncertain",
+      "submission_ack_code": 0,
+      "owner_result_code": -2,
+      "completed": false,
+      "uncertain": true,
+      "activity_observed": true,
+      "settled": false,
+      "completion_wait_ms": 60010,
+      "reported_tape_before_mm": 8627.11,
+      "reported_tape_after_mm": 8596.122,
+      "observed_stages": [
+        "PREPARING PRINT",
+        "PRINTING",
+        "EJECTING"
+      ],
+      "observed_printer_errors": [
+        "NONE",
+        "NONE",
+        "NONE"
+      ],
+      "reason": "Status unavailable after submission; completion unknown",
+      "image_replayed": false,
+      "physical_completion_confirmed": false
+    }
+  },
+  "emulator_before_prints": {
+    "backing_image_sha256": "191ffc39efa1596309f76e47c54ca59add25b9c46d51eb582502af2285bedaf1",
+    "live_generation": 43,
+    "durable_generation": 43,
+    "advertised_initial_counts": 11232,
+    "advertised_remaining_counts": 11232,
+    "view_generation": 45,
+    "refresh_events": 2,
+    "initialization_reads": 1,
+    "verification_reads": 0,
+    "metrics": {
+      "rx_bytes": 1,
+      "tx_completed_bytes": 256,
+      "tx_prefetched_bytes": 352,
+      "byte_irqs": 3,
+      "starts": 0,
+      "stops": 1,
+      "nacks": 1,
+      "rx_overflows": 0,
+      "tx_underflows": 0,
+      "fifo_accounting_errors": 0,
+      "max_isr_cycles": 2218,
+      "last_hw_status": 109051906,
+      "invalid_stops": 0
+    }
+  },
+  "emulator_after_prints": {
+    "backing_image_sha256": "50ce837a5bd0d10e347cc665af5c6df5340fbafbe7579e70a0dff437bcde48ed",
+    "advertised_image_sha256": "80951e097f188cd2973250417a6ed0b1dd2c4ecb19d3a5033f6a8db0629b11ff",
+    "live_generation": 63,
+    "durable_generation": 43,
+    "image_generation": 63,
+    "view_generation": 65,
+    "snapshot_is_current": true,
+    "backing_crc_all_three_valid": true,
+    "advertised_crc_all_three_valid": true,
+    "active": true,
+    "dirty": true,
+    "fault_code": 0,
+    "backing_initial_counts": 6299,
+    "backing_remaining_counts": 10868,
+    "advertised_initial_counts": 11232,
+    "advertised_remaining_counts": 10868,
+    "policy_enabled": true,
+    "policy_persisted": false,
+    "refresh_events": 2,
+    "initialization_reads": 1,
+    "verification_reads": 10,
+    "write_verification_pending": false,
+    "metrics": {
+      "rx_bytes": 201,
+      "tx_completed_bytes": 576,
+      "tx_prefetched_bytes": 3232,
+      "byte_irqs": 67,
+      "starts": 0,
+      "stops": 41,
+      "nacks": 21,
+      "rx_overflows": 0,
+      "tx_underflows": 0,
+      "fifo_accounting_errors": 0,
+      "max_isr_cycles": 4330,
+      "last_hw_status": 109051906,
+      "invalid_stops": 0
+    },
+    "isr_diagnostics": {
+      "isr_calls": 443,
+      "last_irq_flags": 2,
+      "last_rx_count": 0,
+      "last_tx_count": 32,
+      "irq_storms": 0,
+      "empty_rx_irqs": 0
+    },
+    "later_repeat_snapshot_unchanged": true
+  },
+  "aggregate_deltas": {
+    "rx_bytes": 200,
+    "tx_completed_bytes": 320,
+    "stops": 40,
+    "nacks": 20,
+    "backing_generations": 20,
+    "verification_reads": 10,
+    "refresh_events": 0
+  },
+  "aggregate_interpretation": "Consistent with ten cycles of two eight-byte page writes and two sixteen-byte reads. Cumulative counters do not provide a payload log of every transaction or corroborate completion of the eleventh job.",
+  "durability": "The final sample was active and dirty: live generation63, durable generation43. Latest page writes were in RAM. No post-run successful detach/checkpoint or active power-loss durability is claimed.",
+  "later_owner_observations": {
+    "status_utc": "2026-11-18T17:16:56.545064+00:00",
+    "connected": false,
+    "state": "UNKNOWN",
+    "queue_state": "idle",
+    "queued": 0,
+    "explicit_wifi_reconnect_utc": "2026-11-18T17:17:23.560316+00:00",
+    "explicit_wifi_reconnect_http_status": 500,
+    "explicit_wifi_reconnect_message": "Connection failed: Connection timeout",
+    "subsequent_root_reported_ping_utc_minute": "2026-11-18T17:18Z",
+    "subsequent_ping_reply_received": false,
+    "cause": "Unresolved printer/network stall; neither WiFi-only cause nor emulator fault established."
+  },
+  "physical_observation": {
+    "tenth_label_visible_at_output": true,
+    "later_camera_attached_strip_visible": true,
+    "last_label_physical_completion_confirmed": false,
+    "source": "Root camera observation; labels and photographs are not copied into this aggregate.",
+    "later_camera_tenth_label_still_visible": true,
+    "later_camera_strip_movement_observed": false
+  },
+  "independent_local_checks": {
+    "frame_raw_pairs_equal": 15,
+    "full_images_checked": 6,
+    "all_full_image_lengths_hashes_and_crc_regions_valid": true
+  }
 }

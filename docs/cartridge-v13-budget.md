@@ -1,12 +1,13 @@
 # V13: a virtual budget at cartridge initialization
 
-**Live V13 initialization was accepted; V13 print verification is pending.**
+**V13 accepted the virtual budget and completed ten website print jobs. An
+eleventh job remains uncertain.**
 At 17:02:26 UTC on 18 November 2026, a fresh uncached printer status reported
 `IDLE`, `READY FOR PRINT`, error `NONE`, and 8915.4 mm initial and remaining
-length with the V13 responder. See the [redacted initialization
+length with the V13 responder. See the [redacted initialization and print
 evidence](../cartridge/evidence/v13-initialization-validation.json).
-V12's recorded twelve-print result remains the completed print baseline. Neither
-result establishes unlimited printing or complete-roll endurance.
+The existing V12 twelve-print result remains a separate historical test. Neither
+run establishes unlimited printing or complete-roll endurance.
 
 The [existing experiment](cartridge-emulation.md),
 [protocol measurements](cartridge-protocol.md) and
@@ -109,15 +110,34 @@ private bundle is absent. Native C++ tests exercise the policy, CRC projection,
 ordinary write/readback behavior, initialization refresh and checkpoint guards
 without an ESP32 or printer. They do not qualify peripheral timing.
 
-The first live V13 check retained the existing generation-43 backing checkpoint,
+The live V13 check retained the existing generation-43 backing checkpoint,
 completed the separate metadata-only STOP recovery, enabled the 11232-count view,
-and started the sole responder without a reported fault. The printer then
-accepted the advertised initialization values. This does not yet establish that
-new V13 print jobs complete, their usage writes verify, or a later checkpoint
-succeeds. Those results remain pending. Record the exact job outcomes,
-write/readback and generation changes, complete-image CRCs, faults, physical
-output and eventual checkpoint separately. Native test results cannot fill
-those fields.
+and started the sole responder without a reported fault. The printer accepted
+the advertised initialization values. Ten subsequent user-submitted website
+jobs, each with one copy and a half cut, reached verified completion and settled
+idle. The tenth label was visible at the output in the camera view.
+
+The eleventh job received a submission ACK and reached `PRINTING` and `EJECTING`,
+but status feedback then disappeared. The owner timed out after about 60 seconds
+and recorded completion as uncertain. It did not replay the label. Physical
+completion of that final label remains unconfirmed; an ACK or reported length
+decrease does not settle it.
+
+The post-run emulator snapshot had no fault and valid CRCs in both full images.
+Its counters matched ten normal write/readback cycles: backing generation rose
+from 43 to 63, with ten verification reads and no additional refresh. Remaining
+count was 10868. The responder was still active and dirty, with durable generation
+43: the latest twenty page writes were in RAM, not a completed flash checkpoint.
+Policy remained enabled and volatile; it still defaults OFF after reboot.
+A later complete emulator sample retained the same bytes, counters and no-fault
+state.
+
+A later owner status was disconnected/`UNKNOWN` with an idle queue. A supported
+Wi-Fi reconnect timed out, and a subsequent ping received no reply. The cause of
+the printer/network stall remains unresolved. These observations do not establish
+a Wi-Fi-only root cause or an emulator failure. The camera still showed an
+attached strip. Subsequent recovery, final-label confirmation and a clean
+detach/checkpoint must be recorded separately.
 
 Physical media-end sensing, full-roll use, arbitrary bus masters, interrupted
 transactions and EEPROM-like power-loss persistence remain separate tests.
