@@ -1,0 +1,25 @@
+{
+  "schema": "sunburn.vc500w.runtime-source.v1",
+  "description": "Standalone runtime source used by the printer owner during the November2026 cartridge experiment; no Electron application included.",
+  "origin_repository": "https://github.com/Sunburn-Schematics/Sunburn-Schematics-Website",
+  "source_paths": [
+    "desktop/printer-driver.js",
+    "desktop/usb-printer-io.cs"
+  ],
+  "capture_note": "Locally deployed source included reviewed changes beyond its source checkout HEAD. File hashes, not an invented Git commit, identify this publication.",
+  "public_source_transforms": [],
+  "files": {
+    "printer-driver.js": {
+      "sha256": "4c597421e34633d9516940c6a43cddd30eeebcb4df18d92084d5aba6aba348f3",
+      "bytes": 73181,
+      "byte_identical_to_reviewed_runtime_copy": true
+    },
+    "usb-printer-io.cs": {
+      "sha256": "566c08a78f56289de5e8a3fccddaa2c0b1da24ea71b147e24e941be4d31cf1a8",
+      "bytes": 15472,
+      "byte_identical_to_reviewed_runtime_copy": true
+    }
+  },
+  "test_template": "Existing driver-only completion and connection-ownership regressions; Electron main-process/IPC cases omitted because their application is not included.",
+  "hardware_tests_in_public_test_command": false
+}

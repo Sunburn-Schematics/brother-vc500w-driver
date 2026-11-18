@@ -1,0 +1,29 @@
+Passive I2C capture firmware v2 — remote application updates
+
+Template/source: firmware/passive_i2c/passive_i2c.ino v1 was reused. GPIO21(SDA)/22(SCL) remain inputs with pulls disabled; busLevels/onEdge/stopCapture/crc32 bodies are unchanged. The 8192-record buffer is allocated once from explicit internal byte-addressable RAM. Allocation failure closes ARM. This is a hardware experiment, not an application deployment or a new lossless sampler claim.
+
+Build: Arduino CLI1.6.0, esp32:esp32@2.0.17, ESP-IDF4.4.7; FQBN esp32:esp32:esp32doit-devkit-v1. Default partition table contains two0x140000-byte OTA app slots. The initial v2 installation still needs the ROM upload procedure because v1 has no application updater. Later compatible application updates can use either transport below without BOOT/EN.
+
+USB UART921600baud, DTR/RTS deasserted; newline-delimited ASCII commands:
+INFO/STATUS -> status, firmware=i2c-passive-edge-v2, existing passive pins/cpu240/capture fields, buffer_ready/update_busy/recovery_required.
+ARM100..120000milliseconds, STOP, DUMP -> same raw edge schema sunburn.i2c.raw-edges.v1; DUMP is capture JSON + exact binary bytes + newline + dump_end JSON. ARM stops OTA and Wi-Fi before enabling interrupts. STOP/timeout/DUMP restore idle networking. OTA is never serviced while capture is armed.
+NETINFO -> netinfo, no credentials. Includes configured/connected/ip/hostname/ota_port3232/ota_enabled/network_paused/armed/update_busy/buffer_ready/capacity/max_app_bytes/free_heap/min_free_heap/largest_internal_block/recovery_required, plus running_label/running_address/app_elf_sha256. These last three identify the actual selected slot/build after updates.
+WIFI_SET <SSIDhex> <passwordhex|-> <MD5_of_OTA_password_32hex> -> wifi_saved ok:true reboot:true after a single own-namespace NVS blob is saved and read back. No secret echo. '-' selects an empty password. SSID1..32bytes; password empty,8..63bytes,or64ASCIIhexPSK; embedded NUL rejected. Successful provisioning reboots250ms later because the pinned ArduinoOTA implementation will not replace its password hash in place.
+WIFI_CLEAR -> wifi_cleared ok:true reboot:true, removing only the application namespace then rebooting. NVS is ordinary device storage; no encryption claim.
+
+Standard authenticated ArduinoOTA is enabled only after configured Wi-Fi connects. OTA uses LAN IP/UDP3232 with a TCP callback to the uploader. P53 can be controlled through SSH/Tailscale while its uploader binds its LAN IPv4 address; this is not native Tailscale on ESP32. Use the pinned official espota.py with an application binary and the configured OTA password. Filesystem update commands are aborted. No custom ROM boot or cartridge commands are implemented.
+
+USB application update fallback:
+UPDATE <decimal app bytes> <SHA256hex>\n
+Firmware validates size1024..actual inactive-slot capacity and64hex hash, stops capture/network, then Update.begin(U_FLASH). Only after success: update_ready bytes:N sha256:lowercase idle_timeout_ms:15000 total_timeout_ms:180000 chunk_bytes:1024.
+Host sends exactly min(1024,remaining) immutable application bytes, with no newline trailer, and WAITS for update_progress bytes:<exact cumulative count> before each next chunk. The firmware aggregates each full-or-last chunk and grants the next credit only after Update.write accepts the current chunk. Do not stream continuously or rely on sleeps.
+The first chunk must contain ESP image magic plus the ESP-IDF application descriptor magic at byte32, excluding bootloader/merged images. After the last progress ACK, SHA256 is compared before Update.end(false) validates/activates the new OTA slot. Success: update_result ok:true bytes:N sha256:expected reboot:true, then250ms reboot. Do not upload a partition table or merged/full-flash backup through this path.
+Failure: update_result ok:false message:<code> bytes:<received/accepted count>; Update.abort leaves the prior application selected. A fresh recovery_nonce locks USB mutation commands against residual binary input. Client exits/closes without retry. INFO/NETINFO remain available; CONTROL_RESET <matching recovery_nonce> is an explicit future recovery command. No update_ready means no binary may be sent.
+
+Evidence: ../../toolchain/v2-build-freeze.json, test_v2_control_rules.cpp (ASan/UBSan PASS), and peer source/ELF review. Live network/update validation belongs to the root hardware owner.
+
+Official primary APIs inspected:
+https://github.com/espressif/arduino-esp32/tree/2.0.17/libraries/ArduinoOTA
+https://github.com/espressif/arduino-esp32/tree/2.0.17/libraries/Update
+https://github.com/espressif/arduino-esp32/tree/2.0.17/libraries/Preferences
+https://docs.espressif.com/projects/esp-idf/en/v4.4.7/esp32/api-reference/system/ota.html

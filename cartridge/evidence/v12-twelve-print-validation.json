@@ -1,0 +1,295 @@
+{
+  "schema": "brother-vc500w.public-cartridge-print-validation.v1",
+  "date_utc": "2026-11-18",
+  "qualification": "Twelve user-submitted half-cut labels completed; normal cartridge reads and RAM page writes observed. Active power-loss durability and complete-roll endurance are not qualified.",
+  "hardware": {
+    "printer": "Brother VC-500W",
+    "printer_firmware": "2022071322",
+    "media": "CZ-1003,19mm nominal,5m nominal",
+    "controller": "Classic ESP32 DOIT DevKitV1",
+    "arduino_esp32_core": "2.0.17",
+    "idf": "4.4.7",
+    "cpu_mhz": 240,
+    "emulator_revision": "i2c-eeprom-emulator-v12",
+    "app_elf_sha256": "3ad95ccb879b855fdbc3a260ec9944b83a05edf6d44b50b536220ab7e4468f5b",
+    "app_sha256": "2fa0798bcd613d3fe347e4d28204ae0b1580a43d8c3a232696c240e38476f4d1"
+  },
+  "baseline": {
+    "image_sha256": "d7c0db4edb0db564e8980ba26b8ebf6f95082685aa4e0b40c8c8630b4715e091",
+    "remaining_u16": 6256,
+    "live_generation": 1,
+    "durable_generation": 1,
+    "metrics": {
+      "rx_bytes": 1,
+      "tx_completed_bytes": 256,
+      "tx_prefetched_bytes": 352,
+      "byte_irqs": 5,
+      "starts": 0,
+      "stops": 1,
+      "nacks": 1,
+      "rx_overflows": 0,
+      "tx_underflows": 0,
+      "fifo_accounting_errors": 0,
+      "max_isr_cycles": 1747,
+      "last_hw_status": 109051906,
+      "invalid_stops": 0
+    }
+  },
+  "after": {
+    "image_sha256": "0740b6632a475e8d0497cecd121c284044380b7e87f5d651807e62d6c508e551",
+    "remaining_u16": 5821,
+    "image_generation": 25,
+    "snapshot_is_current": true,
+    "live_generation": 25,
+    "durable_generation": 1,
+    "dirty": true,
+    "active": true,
+    "session_open": true,
+    "session_active_marker": true,
+    "fault_code": 0,
+    "crc_r0": true,
+    "crc_rw1": true,
+    "crc_rw2": true,
+    "metrics": {
+      "rx_bytes": 241,
+      "tx_completed_bytes": 640,
+      "tx_prefetched_bytes": 3808,
+      "byte_irqs": 79,
+      "starts": 0,
+      "stops": 49,
+      "nacks": 25,
+      "rx_overflows": 0,
+      "tx_underflows": 0,
+      "fifo_accounting_errors": 0,
+      "max_isr_cycles": 2305,
+      "last_hw_status": 109051906,
+      "invalid_stops": 0
+    },
+    "isr_calls": 523,
+    "irq_storms": 0,
+    "last_read_accounting": {
+      "method": "fifo_dequeued_at_terminal_nack",
+      "loaded": 48,
+      "fifo_remaining": 32,
+      "consumed": 16,
+      "terminal_nack": true,
+      "rx_irq_diagnostic": 1,
+      "tx_irq_diagnostic": 1
+    }
+  },
+  "changed_offsets": [
+    {
+      "offset_hex": "E8",
+      "before_hex": "70",
+      "after_hex": "BD"
+    },
+    {
+      "offset_hex": "E9",
+      "before_hex": "18",
+      "after_hex": "16"
+    },
+    {
+      "offset_hex": "F6",
+      "before_hex": "AA",
+      "after_hex": "AD"
+    },
+    {
+      "offset_hex": "F7",
+      "before_hex": "25",
+      "after_hex": "B2"
+    }
+  ],
+  "computed_crcs": {
+    "R0": "3751",
+    "RW1": "98CB",
+    "RW2": "B2AD"
+  },
+  "deltas": {
+    "live_generations": 24,
+    "rx_bytes": 240,
+    "tx_completed_bytes": 384,
+    "stops": 48,
+    "nacks": 24,
+    "remaining_counts": -435
+  },
+  "aggregate_interpretation": "Exactly consistent with12cycles, each containing2x8byte page writes and2x16byte reads. This is aggregate consistency, not an exported payload log of every transaction.",
+  "owner_print_results": {
+    "job_count": 12,
+    "all_completed": true,
+    "all_verified": true,
+    "all_saw_busy_then_settled": true,
+    "all_copies": 1,
+    "all_cut_mode": "half",
+    "all_quality": "vivid",
+    "job_window_utc": {
+      "first_submission": "2026-11-18T04:48:46.925Z",
+      "last_submission": "2026-11-18T04:53:48.663Z"
+    },
+    "final_uncached_state": "IDLE",
+    "final_uncached_stage": "SUCCESS",
+    "final_uncached_error": "NONE",
+    "jobs": [
+      {
+        "ordinal": 1,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 31537,
+        "reported_tape_used_mm": 32.258
+      },
+      {
+        "ordinal": 2,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22073,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 3,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 23550,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 4,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22692,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 5,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22428,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 6,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22462,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 7,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 23252,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 8,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22018,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 9,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 21381,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 10,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22424,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 11,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22019,
+        "reported_tape_used_mm": 28.448
+      },
+      {
+        "ordinal": 12,
+        "cut_mode": "half",
+        "copies": 1,
+        "completed": true,
+        "verified": true,
+        "saw_busy": true,
+        "settled": true,
+        "elapsed_ms": 22532,
+        "reported_tape_used_mm": 28.448
+      }
+    ]
+  },
+  "display_counter_caveat": {
+    "last_job_reported_remaining_mm": 4620.514,
+    "later_fresh_owner_remaining_mm": 4613.656,
+    "difference_mm": 6.858,
+    "cause": "Not established; do not convert this discrepancy into an invented EEPROM write or a physical tape measurement."
+  },
+  "persistence": "Final sample is RAM-only: live25/durable1/dirtytrue. A separate explicit detached checkpoint is required before durability can be claimed.",
+  "privacy": {
+    "full_eeprom_dump_included": false,
+    "part_numbers_or_part_list_included": false,
+    "job_ids_included": false,
+    "host_addresses_included": false,
+    "credentials_included": false,
+    "redaction": "Only aggregate state and redacted owner job outcomes are exported; private source evidence remains unchanged."
+  },
+  "private_source_file_sha256": {
+    "baseline_receipt": "85eab2e01ef9b57ccb4848ef9dfa566a0d702d33e93d9290fed13dcb220500a1",
+    "after_receipt": "585c3023b18b5f1e7d13097bf82a6d6ef75ad6f7288eaeb4751c5719ad05a1d6",
+    "owner_readback": "91556bb81e4b23f4f4859262eb41268ac86e46cc0c25335aba896ddb1eb388fe",
+    "independent_review": "39b42025ba5d5584cfe013392e2b77861e6a03cacd8d41e039fae6ba411559b8"
+  },
+  "limits": [
+    "Physical cartridge chips must be disconnected; this is sole-address0x50 replacement,not transparent passthrough.",
+    "Only observed Brother normal100kHz patterns are qualified; arbitrary shortread,400kHz and malformedSTOP interoperability remain unqualified.",
+    "While active, accepted writes are volatileRAM; write_evidence ring4 is inactive-only and cannot preserve all24pagepayloads.",
+    "No automatic counter reset,CRC repair or identity change occurs during emulation.",
+    "Twelve label completions do not prove complete5mroll use or physicalend bypass.",
+    "Earlier V11 lost usage write and earlier V7 volatilehistory are not reconstructed by this successful run."
+  ]
+}

@@ -1,0 +1,5 @@
+# Live UART commands; the default offline host tests use the standard library.
+pyserial==3.5
+# Optional static ELF analysis and firmware placement checks (never execute targets).
+pyelftools==0.32
+capstone==5.0.6

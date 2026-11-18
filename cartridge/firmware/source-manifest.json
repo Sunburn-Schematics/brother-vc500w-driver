@@ -1,0 +1,496 @@
+{
+  "schema": "brother-vc500w.firmware-source-inventory.v1",
+  "default": "eeprom_emulator_v12",
+  "source_date": "2026-11-18",
+  "frozen_source_bytes_unchanged": true,
+  "files": {
+    "firmware/bounded100_i2c/INTERFACE.txt": {
+      "bytes": 5064,
+      "sha256": "4370bcf390f0cd3d012b2114d4849f1b02e4debef6cebd8e8734914f67e024ec"
+    },
+    "firmware/bounded100_i2c/bounded100_i2c.ino": {
+      "bytes": 29437,
+      "sha256": "a38f395b7da31f526fceb33a48483700988ae70cb150a617eb4c511569bc5115"
+    },
+    "firmware/bounded100_i2c/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/bounded100_i2c/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v10/INTERFACE.txt": {
+      "bytes": 20083,
+      "sha256": "93c49b448662bd1e4209931f272487ba189b6edd16af2889cfd9ecae903d763a"
+    },
+    "firmware/eeprom_emulator_v10/adoption_rules.h": {
+      "bytes": 728,
+      "sha256": "6dbf87a9011490ac9a19167bd1b644d35a847be8c6b9b7147e33ae721abb4c69"
+    },
+    "firmware/eeprom_emulator_v10/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/eeprom_emulator_v10/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/eeprom_emulator_v10/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/eeprom_emulator_v10/detached_diag.h": {
+      "bytes": 5971,
+      "sha256": "3abdd48685b0ba608494ca17cc75800203a48e7ef0bc7fb9de85c5ca99c879b7"
+    },
+    "firmware/eeprom_emulator_v10/eeprom_emulator_v10.ino": {
+      "bytes": 30757,
+      "sha256": "019d1a8a24cdde23c55b9e6a431a2c7552326cda03d2c5a93f1b59d898e462aa"
+    },
+    "firmware/eeprom_emulator_v10/eeprom_model.h": {
+      "bytes": 2888,
+      "sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a"
+    },
+    "firmware/eeprom_emulator_v10/emulator_commands.h": {
+      "bytes": 20556,
+      "sha256": "20e83adf50a391ea9e13bcf9eb18b77ccb0978288bafc205223c574303638f86"
+    },
+    "firmware/eeprom_emulator_v10/emulator_hw.h": {
+      "bytes": 12993,
+      "sha256": "6e272192c799eee3d9e4e3823167e734449ca26c28854e2b723cf26249277389"
+    },
+    "firmware/eeprom_emulator_v10/irq_rules.h": {
+      "bytes": 617,
+      "sha256": "90982b9223a9abd18f4f9ddb1630d89784ac56749aef9d16127869085dc3281c"
+    },
+    "firmware/eeprom_emulator_v10/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v10/pullup_control.h": {
+      "bytes": 3070,
+      "sha256": "98a32885445f315a44b887a24eec158590af4e3913af0d1cd071956c2ae4583e"
+    },
+    "firmware/eeprom_emulator_v10/recovery_rules.h": {
+      "bytes": 696,
+      "sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac"
+    },
+    "firmware/eeprom_emulator_v10/v10_commands.h": {
+      "bytes": 5439,
+      "sha256": "e31b25b94dd87babcbe400f6c7b3fd5ea2a21ca6deac82e53590b7bf9d8b40e9"
+    },
+    "firmware/eeprom_emulator_v10/v10_rules.h": {
+      "bytes": 928,
+      "sha256": "e3be4be1ed4b37dfcd22e5553c710ea6623aee68a57ee57ea2ea2ba59d2aa8c2"
+    },
+    "firmware/eeprom_emulator_v11/INTERFACE.txt": {
+      "bytes": 23241,
+      "sha256": "1f7641565c903d2f0da270bf443b14984e353e8e6dadf02b0feb40563550c4e7"
+    },
+    "firmware/eeprom_emulator_v11/adoption_rules.h": {
+      "bytes": 728,
+      "sha256": "6dbf87a9011490ac9a19167bd1b644d35a847be8c6b9b7147e33ae721abb4c69"
+    },
+    "firmware/eeprom_emulator_v11/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/eeprom_emulator_v11/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/eeprom_emulator_v11/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/eeprom_emulator_v11/detached_diag.h": {
+      "bytes": 5971,
+      "sha256": "3abdd48685b0ba608494ca17cc75800203a48e7ef0bc7fb9de85c5ca99c879b7"
+    },
+    "firmware/eeprom_emulator_v11/eeprom_emulator_v11.ino": {
+      "bytes": 30757,
+      "sha256": "2c5bf7f7a4c166283652a159cc2b1e8c862526f330edb2580a97c0573929f758"
+    },
+    "firmware/eeprom_emulator_v11/eeprom_model.h": {
+      "bytes": 2888,
+      "sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a"
+    },
+    "firmware/eeprom_emulator_v11/emulator_commands.h": {
+      "bytes": 21200,
+      "sha256": "1b7cd773ba050103dc01770dbf83f2f97759b8b2d9bd11f2a89eaa367ab77a51"
+    },
+    "firmware/eeprom_emulator_v11/emulator_hw.h": {
+      "bytes": 13557,
+      "sha256": "56609bbf6aef023a701107bfea5c564cc7839641da1e84e6deb57316ee128bbf"
+    },
+    "firmware/eeprom_emulator_v11/irq_rules.h": {
+      "bytes": 617,
+      "sha256": "90982b9223a9abd18f4f9ddb1630d89784ac56749aef9d16127869085dc3281c"
+    },
+    "firmware/eeprom_emulator_v11/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v11/pullup_control.h": {
+      "bytes": 3070,
+      "sha256": "98a32885445f315a44b887a24eec158590af4e3913af0d1cd071956c2ae4583e"
+    },
+    "firmware/eeprom_emulator_v11/read_accounting.h": {
+      "bytes": 677,
+      "sha256": "9b57429d947ee58e93de944d69bbb21976afabd9b455af6761e48192c77cb906"
+    },
+    "firmware/eeprom_emulator_v11/read_recovery_rules.h": {
+      "bytes": 289,
+      "sha256": "c74128975c4b9669d0e3f643f8a7f24b75fdf46c8130028863bd75141c5a41c9"
+    },
+    "firmware/eeprom_emulator_v11/recovery_rules.h": {
+      "bytes": 696,
+      "sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac"
+    },
+    "firmware/eeprom_emulator_v11/v10_commands.h": {
+      "bytes": 5439,
+      "sha256": "e31b25b94dd87babcbe400f6c7b3fd5ea2a21ca6deac82e53590b7bf9d8b40e9"
+    },
+    "firmware/eeprom_emulator_v11/v10_rules.h": {
+      "bytes": 928,
+      "sha256": "e3be4be1ed4b37dfcd22e5553c710ea6623aee68a57ee57ea2ea2ba59d2aa8c2"
+    },
+    "firmware/eeprom_emulator_v11/v11_commands.h": {
+      "bytes": 1554,
+      "sha256": "9b053b0e8cf2085d60aaecbf151fb97a5694bd431c9bb431fcf5896557dfd689"
+    },
+    "firmware/eeprom_emulator_v12/INTERFACE.txt": {
+      "bytes": 26680,
+      "sha256": "17eda87f75f4304ca668c795cb6e059a59c858f7478f209aa4d8e5467d8a3d72"
+    },
+    "firmware/eeprom_emulator_v12/adoption_rules.h": {
+      "bytes": 728,
+      "sha256": "6dbf87a9011490ac9a19167bd1b644d35a847be8c6b9b7147e33ae721abb4c69"
+    },
+    "firmware/eeprom_emulator_v12/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/eeprom_emulator_v12/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/eeprom_emulator_v12/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/eeprom_emulator_v12/detached_diag.h": {
+      "bytes": 5971,
+      "sha256": "3abdd48685b0ba608494ca17cc75800203a48e7ef0bc7fb9de85c5ca99c879b7"
+    },
+    "firmware/eeprom_emulator_v12/eeprom_emulator_v12.ino": {
+      "bytes": 30757,
+      "sha256": "e7fa605192ca0ed8fc98d530fe49b1772ef112c9b946f7034631f59c0b252c93"
+    },
+    "firmware/eeprom_emulator_v12/eeprom_model.h": {
+      "bytes": 2888,
+      "sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a"
+    },
+    "firmware/eeprom_emulator_v12/emulator_commands.h": {
+      "bytes": 21379,
+      "sha256": "20a6035d05471a7eef360240899b74e86d0ee434edecf4f596b368b30f1126ad"
+    },
+    "firmware/eeprom_emulator_v12/emulator_hw.h": {
+      "bytes": 14264,
+      "sha256": "303a9efa4ca78bdddcf442564e99192e7a198dac018609f6cbd93b93cbd24ad3"
+    },
+    "firmware/eeprom_emulator_v12/irq_rules.h": {
+      "bytes": 617,
+      "sha256": "90982b9223a9abd18f4f9ddb1630d89784ac56749aef9d16127869085dc3281c"
+    },
+    "firmware/eeprom_emulator_v12/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v12/pullup_control.h": {
+      "bytes": 3070,
+      "sha256": "98a32885445f315a44b887a24eec158590af4e3913af0d1cd071956c2ae4583e"
+    },
+    "firmware/eeprom_emulator_v12/read_accounting.h": {
+      "bytes": 677,
+      "sha256": "9b57429d947ee58e93de944d69bbb21976afabd9b455af6761e48192c77cb906"
+    },
+    "firmware/eeprom_emulator_v12/read_recovery_rules.h": {
+      "bytes": 289,
+      "sha256": "c74128975c4b9669d0e3f643f8a7f24b75fdf46c8130028863bd75141c5a41c9"
+    },
+    "firmware/eeprom_emulator_v12/recovery_rules.h": {
+      "bytes": 696,
+      "sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac"
+    },
+    "firmware/eeprom_emulator_v12/v10_commands.h": {
+      "bytes": 5439,
+      "sha256": "e31b25b94dd87babcbe400f6c7b3fd5ea2a21ca6deac82e53590b7bf9d8b40e9"
+    },
+    "firmware/eeprom_emulator_v12/v10_rules.h": {
+      "bytes": 928,
+      "sha256": "e3be4be1ed4b37dfcd22e5553c710ea6623aee68a57ee57ea2ea2ba59d2aa8c2"
+    },
+    "firmware/eeprom_emulator_v12/v11_commands.h": {
+      "bytes": 1554,
+      "sha256": "9b053b0e8cf2085d60aaecbf151fb97a5694bd431c9bb431fcf5896557dfd689"
+    },
+    "firmware/eeprom_emulator_v12/v12_commands.h": {
+      "bytes": 1600,
+      "sha256": "c32b7916469a259ff5b3a874de06453b6096fcb66e2eaeced99cfc2188732085"
+    },
+    "firmware/eeprom_emulator_v12/write_evidence.h": {
+      "bytes": 1461,
+      "sha256": "227b3eda033365fddf6866e5c35dbb5942c22fdfae971aa726cfac050f08f122"
+    },
+    "firmware/eeprom_emulator_v12/write_evidence_output.h": {
+      "bytes": 1719,
+      "sha256": "43a4e248f22f36167cc737f7dbc8f0ee52e20f081f8c3fb209c298d8a23034fd"
+    },
+    "firmware/eeprom_emulator_v12/write_recovery_rules.h": {
+      "bytes": 290,
+      "sha256": "60da02394112dc4bcc46fde7f0c0a99d8e75dddb0ec16ed68fe360a86d836aab"
+    },
+    "firmware/eeprom_emulator_v12/write_rules.h": {
+      "bytes": 1332,
+      "sha256": "eeec8218410dad4810ffef928cbe52f4c6db84323026ee50a52a441f5537cdbb"
+    },
+    "firmware/eeprom_emulator_v6/INTERFACE.txt": {
+      "bytes": 7620,
+      "sha256": "1419b5cc8b119e5466f0816ae429715fa400d6dbd21c0916b8c94c9fac01fbff"
+    },
+    "firmware/eeprom_emulator_v6/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/eeprom_emulator_v6/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/eeprom_emulator_v6/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/eeprom_emulator_v6/eeprom_emulator_v6.ino": {
+      "bytes": 30343,
+      "sha256": "261621f5ed9e4699c0fe85736b7d74e1c9c6c473bbdb0485efdd5c548e97b9ab"
+    },
+    "firmware/eeprom_emulator_v6/eeprom_model.h": {
+      "bytes": 2888,
+      "sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a"
+    },
+    "firmware/eeprom_emulator_v6/emulator_commands.h": {
+      "bytes": 11712,
+      "sha256": "31ade5f27e74b6f77d1dc0e496a48f40f34ae8aa47de3b23a0b475f8c04e9433"
+    },
+    "firmware/eeprom_emulator_v6/emulator_hw.h": {
+      "bytes": 8278,
+      "sha256": "ea845e8e3f5416dd1ef0ffa72b8d62d378b1cd8a2aeb01ac10c96cb9e1c42868"
+    },
+    "firmware/eeprom_emulator_v6/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v7/INTERFACE.txt": {
+      "bytes": 9303,
+      "sha256": "763a05e853698e739f11ca27cc32a5d2d2792d0517b70aa9597574a08499f946"
+    },
+    "firmware/eeprom_emulator_v7/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/eeprom_emulator_v7/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/eeprom_emulator_v7/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/eeprom_emulator_v7/eeprom_emulator_v7.ino": {
+      "bytes": 30343,
+      "sha256": "bd1cc7687cd6a8462b8da83d3cf309ebc38db52980f311315099a380a2d131d5"
+    },
+    "firmware/eeprom_emulator_v7/eeprom_model.h": {
+      "bytes": 2888,
+      "sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a"
+    },
+    "firmware/eeprom_emulator_v7/emulator_commands.h": {
+      "bytes": 14873,
+      "sha256": "22dea3ce3caa5d804c74e801f2b86729746c52de9ce106ea50d6403898ab2d40"
+    },
+    "firmware/eeprom_emulator_v7/emulator_hw.h": {
+      "bytes": 10106,
+      "sha256": "69b73435faa4b7e241f454d64bdab0b40c33ae1bcb9b31c901ec2cd023743c6f"
+    },
+    "firmware/eeprom_emulator_v7/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v7/recovery_rules.h": {
+      "bytes": 696,
+      "sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac"
+    },
+    "firmware/eeprom_emulator_v8/INTERFACE.txt": {
+      "bytes": 12832,
+      "sha256": "89caaebdb164198da8397ffea660cbce48964b5a6bc21e6f2a51b4d0ff5073da"
+    },
+    "firmware/eeprom_emulator_v8/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/eeprom_emulator_v8/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/eeprom_emulator_v8/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/eeprom_emulator_v8/detached_diag.h": {
+      "bytes": 5429,
+      "sha256": "20e411314ac3843369eefbcd7328097ffe7c451935bc552485567b4a871b668d"
+    },
+    "firmware/eeprom_emulator_v8/eeprom_emulator_v8.ino": {
+      "bytes": 30367,
+      "sha256": "be66d9658c50d2c3f4af6d6e660b25edf7aae5f2e0dc62354860f979134a41a9"
+    },
+    "firmware/eeprom_emulator_v8/eeprom_model.h": {
+      "bytes": 2888,
+      "sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a"
+    },
+    "firmware/eeprom_emulator_v8/emulator_commands.h": {
+      "bytes": 15806,
+      "sha256": "91093968bc7490e9f94f4d04f3632921b7d3752362b5e67862f27122d857edfc"
+    },
+    "firmware/eeprom_emulator_v8/emulator_hw.h": {
+      "bytes": 12008,
+      "sha256": "6e05614ec964e8667db9f4b2b9d328488bf54da404b54708cbb68d27dfd332e2"
+    },
+    "firmware/eeprom_emulator_v8/irq_rules.h": {
+      "bytes": 617,
+      "sha256": "90982b9223a9abd18f4f9ddb1630d89784ac56749aef9d16127869085dc3281c"
+    },
+    "firmware/eeprom_emulator_v8/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v8/recovery_rules.h": {
+      "bytes": 696,
+      "sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac"
+    },
+    "firmware/eeprom_emulator_v9/INTERFACE.txt": {
+      "bytes": 15981,
+      "sha256": "9eba89da2e4bf3680a713906542e139bf37f709f5f1b402fcb2bd9a6902a524f"
+    },
+    "firmware/eeprom_emulator_v9/adoption_rules.h": {
+      "bytes": 728,
+      "sha256": "6dbf87a9011490ac9a19167bd1b644d35a847be8c6b9b7147e33ae721abb4c69"
+    },
+    "firmware/eeprom_emulator_v9/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/eeprom_emulator_v9/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/eeprom_emulator_v9/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/eeprom_emulator_v9/detached_diag.h": {
+      "bytes": 5971,
+      "sha256": "3abdd48685b0ba608494ca17cc75800203a48e7ef0bc7fb9de85c5ca99c879b7"
+    },
+    "firmware/eeprom_emulator_v9/eeprom_emulator_v9.ino": {
+      "bytes": 30367,
+      "sha256": "1211d0a668109024d76d1e8f05c2b30afc25e80ddd28cd094354539cc458e56a"
+    },
+    "firmware/eeprom_emulator_v9/eeprom_model.h": {
+      "bytes": 2888,
+      "sha256": "b4f0a6ee4dbb9d95f5ca5e2dec36a324ed8f25fb13167b088ac4dd6ec194664a"
+    },
+    "firmware/eeprom_emulator_v9/emulator_commands.h": {
+      "bytes": 19800,
+      "sha256": "850883f5677d9d9f1eadfc8f0268c1b8012d3b2179d377d99ebab466ead2452f"
+    },
+    "firmware/eeprom_emulator_v9/emulator_hw.h": {
+      "bytes": 12671,
+      "sha256": "d9b087da2fb9c8790b61edc18e63e3c4f074402cb7dc40a0e5aab55bdd999516"
+    },
+    "firmware/eeprom_emulator_v9/irq_rules.h": {
+      "bytes": 617,
+      "sha256": "90982b9223a9abd18f4f9ddb1630d89784ac56749aef9d16127869085dc3281c"
+    },
+    "firmware/eeprom_emulator_v9/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/eeprom_emulator_v9/recovery_rules.h": {
+      "bytes": 696,
+      "sha256": "fb034e4a0d08fde740c986990a5d4f2abdd7e682bac874e3f94a1c9419b870ac"
+    },
+    "firmware/isolated_bench_i2c/INTERFACE.txt": {
+      "bytes": 10782,
+      "sha256": "1fe52c5d67bb0df612c20958c64311281e86be75599545ed2aade06c84f0c8e3"
+    },
+    "firmware/isolated_bench_i2c/bench_commands.h": {
+      "bytes": 9488,
+      "sha256": "a8960ef35958bd7209abf8256aa95c699afa7f4ada96463b250bda806099c3f1"
+    },
+    "firmware/isolated_bench_i2c/bench_rules.h": {
+      "bytes": 7247,
+      "sha256": "ccd31551ecd83053aea04c9bd2e6f9ae60351f7749bce7e69e0b6e87aa94514e"
+    },
+    "firmware/isolated_bench_i2c/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/isolated_bench_i2c/isolated_bench_i2c.ino": {
+      "bytes": 30125,
+      "sha256": "12a99844782f710a9cc22440b8438a64ee522c0fda35c727dd5c57c819f9855e"
+    },
+    "firmware/isolated_bench_i2c/poll_rules.h": {
+      "bytes": 1079,
+      "sha256": "8bcbc37614004a21f9c7172f8b2489aa80172b50866e92cc44c777f50971a732"
+    },
+    "firmware/ota_i2c/INTERFACE.txt": {
+      "bytes": 4759,
+      "sha256": "ea66ce89d058c78497cd49429a473e91890dce40fd459af9c85a01872aadf6e5"
+    },
+    "firmware/ota_i2c/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/ota_i2c/ota_i2c.ino": {
+      "bytes": 22303,
+      "sha256": "e8cb6767ef170218b47f9b88a464af368bb2dd7b23c86e5cdaf2768ab2c99282"
+    },
+    "firmware/passive_i2c/passive_i2c.ino": {
+      "bytes": 7177,
+      "sha256": "a39741d98a585f2ba95cadc3a9f844211ee3f64bdaaaec3f606d785bb895e8c2"
+    },
+    "firmware/polling_i2c/INTERFACE.txt": {
+      "bytes": 5007,
+      "sha256": "db4921a800317896afdd1a86be4913660a58731625ddd6dadffbe0f3f3c3f5c2"
+    },
+    "firmware/polling_i2c/control_rules.h": {
+      "bytes": 1994,
+      "sha256": "3712abb397dd1e12e7332738943cd2c1666e400302e199a74109842b96d50b5e"
+    },
+    "firmware/polling_i2c/poll_rules.h": {
+      "bytes": 1078,
+      "sha256": "5050021c2bce9738616575f9019f42fa04e3502af61c204f5e7f0052586e7492"
+    },
+    "firmware/polling_i2c/polling_i2c.ino": {
+      "bytes": 29434,
+      "sha256": "bec6899fc3c330798f35a886d9ab1db6fea9176f7551cab4cb925de9498d171a"
+    }
+  },
+  "original_qualified_v12_app_sha256": "2fa0798bcd613d3fe347e4d28204ae0b1580a43d8c3a232696c240e38476f4d1",
+  "original_qualified_v12_elf_sha256": "3ad95ccb879b855fdbc3a260ec9944b83a05edf6d44b50b536220ab7e4468f5b",
+  "original_builds_not_distributed": true,
+  "rebuild_hashes_may_differ_with_paths_and_build_metadata": true
+}

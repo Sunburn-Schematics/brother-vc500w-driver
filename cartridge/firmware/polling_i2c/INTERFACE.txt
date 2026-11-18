@@ -1,0 +1,78 @@
+V3 passive polling capture interface
+Template source: frozen firmware/ota_i2c/INTERFACE.txt and ota_i2c.ino (V2).
+The 14 OTA/provisioning/control function bodies and control_rules.h are unchanged;
+see toolchain/v3-source-preservation.json. V3 changes capture implementation only.
+
+Revision: i2c-passive-poll-v3
+Build: build-v3/polling_i2c.ino.bin, classic ESP32 DOIT DevKitV1/core 2.0.17.
+Use host --expect-firmware i2c-passive-poll-v3 after installation. Existing V2
+commands and USB/OTA block-ACK framing remain as documented in ota_i2c/INTERFACE.txt.
+No GPIO outputs, internal pulls, I2C peripheral, device writes, or emulation.
+Printer VCC remains disconnected; GPIO21 SDA/GPIO22 SCL/shared GND only.
+
+Capture behavior
+ARM 100..120000 milliseconds requires core 1, 240 MHz, internal edge buffer available,
+and verified Wi-Fi OFF. Each polling slice masks normal interrupts on core 1 for
+up to 2 ms waiting for an exact observed levels 3->1 START. The first such START
+extends that slice to 50 ms after that observation; later/repeated STARTs never
+extend again. Maximum nominal masked hot-loop duration 52 ms, also capped by the
+remaining ARM duration. The loop checks time even when GPIO does not change.
+No per-edge GPIO ISR dispatcher or esp_timer call is used. The masked hot path
+uses direct GPIO_IN_REG reads, CCOUNT, arithmetic and internal RAM only. All exit
+paths restore interrupts; loop yields 1 ms before the next slice. Watchdogs retain
+the pinned SDK configuration, including 300 ms interrupt-WDT.
+
+The 8192-record buffer never wraps. Overflow preserves earliest records and stops
+capture. There are 128 retained-window metadata entries; the next needed entry
+fails closed and flags metadata overflow. Idle slices with no changed sample are
+discarded and counted. Nonempty untriggered activity slices are retained as
+independent diagnostic windows. Networking resumes after automatic/explicit stop.
+These traces make no lossless claim: changes within one poll interval can be
+missed, and 1 ms yields/normal execution between windows are unsampled.
+
+Binary framing
+The capture JSON header remains one newline-terminated object, followed by exactly
+bytes raw data, newline and dump_end JSON. Schema sunburn.i2c.raw-edges.v1 remains
+unchanged; each record is little-endian <III: timestamp_us low 32, CCOUNT low 32, levels
+(bit 0 SCL, bit 1 SDA; 0..3 only). CRC32 covers raw bytes as inV2.
+
+Additional header fields
+capture_mode:"windowed_polling",sampling_gaps_possible:true,lossless_claim:false,
+sampling_metadata_overflow,discarded_idle_slices,poll_iterations,max_masked_cycles,
+max_masked_us_nominal:52000,wait_slice_us:2000,trigger_tail_us:50000,
+sampling_windows:[...]. isr_callbacks is 0 for compatibility; no GPIO ISR installed.
+
+Every retained window has:
+first_event,event_count: contiguous exact raw-record slice, including a fresh
+initial GPIO snapshot; all slices cover all records without overlap/omission.
+start_us,end_us: full 64-bit microsecond timing bounds for that slice.
+anchor_us,anchor_cycles,anchor_span_cycles: same-core esp_timer/CCOUNT midpoint
+anchor acquired before the masked function, with exposed acquisition uncertainty.
+Timestamp_us is filled after interrupts restore using a signed bounded CCOUNT
+delta; cycle wrapping and pre-anchor conversion are tested offline.
+trigger_event: absolute raw index of first exact observed 3->1 START, or -1;
+trigger_cycles: its CCOUNT, or 0 if untriggered.
+entry_gap_cycles: anchor acquisition end to the fresh initial snapshot; this
+precedes the window and does not conceal a gap between START and the next record.
+max_poll_gap_cycles: maximum observed successive GPIO-sample cycle interval.
+poll_span_cycles: critical-loop first-to-final CCOUNT span.
+masked_cycles: conservative outer CCOUNT span surrounding critical entry/exit;
+includes their overhead and any interrupt immediately after exit, so it can
+exceed the nominal loop bound without implying the watchdog was disabled.
+overflow: this window exhausted edge capacity;missing:false because incomplete
+metadata is never invented;ended_reason:wait_limit,trigger_tail,duration_limit or
+edge_capacity. Header metadata overflow flags the inability to start another
+window; existing slices remain explicit.
+
+Decoding requirements
+Require the V3 window schema. Reset bit/frame state and EEPROM address pointer at
+every window boundary. Never infer transitions, bytes, addresses or memory across
+windows, including across discarded idle slices. Only independently complete
+frames within a window may support bytes. Manufacturer/driver CRC validation and
+independent corroboration remain required before treating bytes as EEPROM data.
+
+Validation
+Build passes and app fits both 1,310,720-byte OTA slots. C++17 -Wall/-Wextra/-Werror
+ASan+UBSan tests cover timestamp sign, cycle wrap, full microsecond precision,
+monotonic 52 ms windows and capped first-trigger deadlines. Independent source/ELF
+review is recorded separately. No hardware operations performed by this agent.
