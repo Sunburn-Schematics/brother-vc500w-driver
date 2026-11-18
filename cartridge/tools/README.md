@@ -152,3 +152,27 @@ are deliberately absent.
 The repository's existing LICENSE applies to authored project code. Upstream
 Arduino/Espressif, Python and FFmpeg software retains its own licensing; this
 directory does not relicense or redistribute those packages.
+
+## V13 initialization-budget candidate
+
+`manage_emulator_v13.py` matches only `i2c-eeprom-emulator-v13`. It adds
+`policy-enable`, `policy-disable` and the original-event-only `recover-stop`.
+The [V13 policy guide](../../docs/cartridge-v13-budget.md) describes the separate
+advertised image, exact image/generation guards and accepted live initialization.
+New V13 print verification remains pending.
+The default build and earlier V12 source remain unchanged.
+
+Policy is explicit, volatile and OFF after boot. Enable takes
+`--capacity-counts` in 1–11232, defaulting to 11232. Both enable and disable
+require the current full backing-image SHA-256 and `--durable-generation`, a
+clean passive session and D19 OFF. They preserve the newest backing bytes;
+disable does not restore a stale seed. `status` saves backing and advertised
+256-byte images with separate generation information. Policy controls do not
+toggle D19, submit a print or refill the view after a verification read. The
+separate explicit `start-pullup` action retains its existing D19 control.
+
+The two V13 original-event proof tests use the existing private replay opt-in;
+other V13 tests use synthetic images. Recovery remains limited to its exact
+private failed-STOP/checkpoint bundle. Missing proof is never replaced with a
+synthetic or edited cartridge identity. Public host portability adaptations have
+offline coverage and have not themselves been requalified on hardware.

@@ -1,0 +1,56 @@
+{
+  "schema": "brother-v13-initialization-aggregate-v1",
+  "status": "LIVE_INITIALIZATION_ACCEPTED_NEW_V13_PRINT_VERIFICATION_PENDING",
+  "template_source": "Existing v12-twelve-print-validation.json aggregate convention; redacted owner status and root-observed V13 control outcomes",
+  "observed_utc": "2026-11-18T17:02:26.039059+00:00",
+  "firmware": {
+    "revision": "i2c-eeprom-emulator-v13",
+    "app_bytes": 821728,
+    "app_sha256": "ba2044f547a197feba0ec2ba08516b84b3ecce751f680bc5b0cef280afed172c",
+    "elf_sha256": "cd12ca766d844df5d618c485b7fa301b5f4a43e9778bc48021d82c718d5d26b3"
+  },
+  "owner_status": {
+    "state": "IDLE",
+    "stage": "READY FOR PRINT",
+    "error": "NONE",
+    "cached": false,
+    "busy": false,
+    "tapeType": "3/4",
+    "tapeLengthMm": 8915.4,
+    "tapeRemainingMm": 8915.4
+  },
+  "pre_enable_backing": {
+    "generation": 43,
+    "initial_counts": 6299,
+    "remaining_counts": 5485,
+    "bytes_retained": true,
+    "original_seed_preserved": true
+  },
+  "root_observed_controls": {
+    "exact_boot_identity_verified": true,
+    "metadata_only_stop_recovery_passed": true,
+    "policy_enable_capacity_counts": 11232,
+    "start_pullup_passed": true,
+    "start_fault_code": 0
+  },
+  "pending": [
+    "new V13 print outcome",
+    "normal usage write and exact readback verification under V13 policy",
+    "post-use full image and CRC verification",
+    "subsequent detach/checkpoint outcome",
+    "full-roll endurance"
+  ],
+  "source_sha256": {
+    "redacted_owner_status_source": "78325b476cdb45a179a0d935de9c3ad99fd9e4951a301e490a003a5b81cd1ee3",
+    "offline_binary_review_source": "35baac43de723f15986b2e56ddbcb2553afe85d2cf0d71eac6a33f8dcdb10d4a"
+  },
+  "redactions": [
+    "printer serial",
+    "network addresses",
+    "host paths",
+    "credentials",
+    "full EEPROM image",
+    "part labels"
+  ],
+  "scope": "Derived initialization evidence only; root operated hardware, public portable host adaptation has offline coverage only. A virtual length does not measure physical media."
+}

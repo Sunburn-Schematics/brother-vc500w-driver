@@ -10,9 +10,14 @@ The earlier firmware directories are development history, including prototypes
 with known failures. Their versioned host tools intentionally check matching
 firmware identities. Do not weaken those checks to combine arbitrary versions.
 
+[V13's initialization-budget policy](../docs/cartridge-v13-budget.md) has passed
+its first live initialization check; new V13 print verification remains pending.
+Its source and offline tests are included separately. V12 remains the default
+build and completed print baseline.
+
 | Directory | Contents |
 | --- | --- |
-| `firmware/` | Authored passive sniffers, isolated EEPROM tools, updater and emulators through V12 |
+| `firmware/` | Authored passive sniffers, isolated EEPROM tools, updater, V12 baseline and V13 policy candidate |
 | `tools/` | UART management, capture decoding, checksum/image inspection and printing diagnostics |
 | `tests/` | Offline native regression harnesses and public test support |
 | `evidence/` | Aggregate twelve-print observations and disclosure of measurement limits |
