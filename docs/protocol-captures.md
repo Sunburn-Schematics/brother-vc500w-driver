@@ -1,6 +1,6 @@
 # Protocol Captures & Raw Examples
 
-This document shows actual captured XML exchanges between a client and the Brother VC-500W.
+This document shows captured XML exchanges between a client and the Brother VC-500W. Device identifiers in examples are replaced with placeholders.
 
 ## Environment
 
@@ -28,9 +28,9 @@ This document shows actual captured XML exchanges between a client and the Broth
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 <model_name>VC-500W</model_name>
-<serial_number>U64934A5Y165843</serial_number>
+<serial_number>EXAMPLE_SERIAL</serial_number>
 <fw_version_number>2022071322</fw_version_number>
-<wlan0_mac_address>04:FE:A1:56:D1:0C</wlan0_mac_address>
+<wlan0_mac_address>02:00:00:00:00:01</wlan0_mac_address>
 <cassette_type>CZ-1004</cassette_type>
 <width_inches>1.0</width_inches>
 <media_length_initial>394.0</media_length_initial>

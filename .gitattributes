@@ -1,0 +1,3 @@
+# Preserve exact Windows runtime source bytes and recognize their CRLF endings.
+runtime/printer-driver.js -text whitespace=cr-at-eol
+runtime/usb-printer-io.cs -text whitespace=cr-at-eol

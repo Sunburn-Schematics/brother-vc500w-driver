@@ -1,6 +1,6 @@
 # Brother VC-500W Driver & Protocol Documentation
 
-Open-source driver and complete protocol reference for the **Brother VC-500W** color label printer. Works over **WiFi (TCP)** and **USB** on Windows, with WiFi support on any platform with TCP sockets.
+Source-available driver and observed protocol reference for the **Brother VC-500W** color label printer. Works over **WiFi (TCP)** and **USB** on Windows, with WiFi support on any platform with TCP sockets.
 
 ![Brother VC-500W printing component labels](images/printer-1.jpg)
 
@@ -14,10 +14,10 @@ If you've ever prototyped with SMD components, you know the pain. You've got doz
 
 The Brother VC-500W with the **3/4" (19mm) CZ-1003 tape** or **1" (25mm) CZ-1004 tape** solves this. Print full-color labels with the part number, value, package size, and even a thumbnail of the schematic symbol — stick it right on the WENTAI box. Now you can actually find what you need while you're in the middle of hand-soldering a prototype board.
 
-The problem? Brother only ships a locked-down Windows/Mac app with no API, no Linux support, and zero protocol documentation. So we reverse-engineered the whole thing.
+We wanted a programmable printing path for our own application. We investigated the printer’s XML-over-TCP protocol and built the drivers and observed protocol reference below.
 
 This project gives you:
-- **The complete XML-over-TCP protocol** — every command, response, and status code documented
+- **Observed XML-over-TCP exchanges** — commands, responses and status codes encountered during testing
 - **Working Node.js drivers** for WiFi and USB
 - **A C# USB driver** for direct Windows device I/O
 - **Production-tested** — we print hundreds of component labels with this at [Sunburn Schematics](https://sunburnschematics.com)
@@ -31,22 +31,49 @@ This project gives you:
 5. Stick them on your component boxes, bins, bags — whatever your storage system is
 6. Actually find the right 0402 cap on the first try instead of the fifth
 
-For batch printing (labeling all your boxes at once), the driver supports sequential printing with automatic IDLE detection between labels — about 15 seconds per label. Tilt the printer upright so the labels fall out by gravity and it runs hands-free.
+For batch printing, send jobs sequentially and verify completion before proceeding. Our twelve-label cartridge-emulation run used half-cuts, with individual device-verification times of about 21–32 seconds. Manually cut and remove the strip after the batch. See the new experiment below.
+
+## ESP32 cartridge EEPROM experiment
+
+We replaced the cassette memory interface with an ESP32 and printed **twelve
+consecutive labels from our normal website**, with half-cuts and no emulator
+faults. The printer read the emulated EEPROM and wrote its usage counter and CRC.
+
+[Read the illustrated experiment and wiring guide](docs/cartridge-emulation.md),
+[protocol details](docs/cartridge-protocol.md),
+[build instructions](docs/cartridge-build.md), and
+[firmware, host tools and tests](cartridge/).
+
+The [standalone runtime driver](runtime/) is the actual driver used during this
+run. It includes print-completion verification and connection ownership tests.
+The older root `driver.js` remains available for compatibility with the original
+examples; its accepted-data result alone does not verify finished output.
+
+![Actual first ESP32-emulated calibration output](images/cartridge-first-emulated-print.jpg)
+
+This is experimental. Active usage writes currently remain in RAM until an
+explicit checkpoint; power-loss durability and an entire cartridge's worth of
+printing have not been demonstrated. The linked write-up separates the earlier
+V11 write failure from the successful twelve-label V12 run.
 
 ## Quick Start
+
+For the driver used in the twelve-label experiment, start with the
+[current runtime API and example](runtime/README.md). The following examples
+describe the older root API.
 
 ### WiFi (any platform)
 
 ```js
 const { VC500WDriver } = require('./driver');
 
-const printer = new VC500WDriver({ host: '192.168.1.243', port: 9100 });
+const printer = new VC500WDriver({ host: '192.0.2.10', port: 9100 });
 await printer.connect();
 
 // Print a JPEG label
 const jpeg = fs.readFileSync('label.jpg');
 const result = await printer.printJpeg(jpeg, { quality: 'vivid', cutMode: 'full' });
-console.log(result.success ? 'Printed!' : 'Failed:', result);
+console.log(result.success ? 'Data accepted; check completion and output' : 'Failed:', result);
 
 // Check status
 const status = await printer.getStatus();
@@ -109,7 +136,7 @@ Client                              Printer (port 9100)
   |<-- XML: <status><code>0</code> ------|  (printer ready for data)
   |                                      |
   |-- [raw JPEG bytes] ----------------->|  (send image)
-  |<-- XML: <status><code>0</code> ------|  (print complete)
+  |<-- XML: <status><code>0</code> ------|  (print data accepted)
   |                                      |
   |-------- TCP Close ------------------->|  ** REQUIRED to trigger cut **
   |                                      |
@@ -120,7 +147,7 @@ Client                              Printer (port 9100)
 
 ### Critical Discovery: Socket Close Triggers Cut
 
-**The printer will NOT cut the label until the TCP connection is closed.** If you keep the socket open after receiving the print completion response, the printer sits in a "waiting" state with blinking lights. You must close the TCP socket to trigger the cut cycle, then reconnect for the next operation.
+**The printer will NOT cut the label until the TCP connection is closed.** If you keep the socket open after receiving the print-data acknowledgement, the printer sits in a "waiting" state with blinking lights. You must close the TCP socket to trigger the cut cycle, then reconnect for the next operation.
 
 ## XML Commands
 
@@ -145,9 +172,9 @@ All commands are prefixed with `<?xml version="1.0" encoding="UTF-8"?>` followed
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 <model_name>VC-500W</model_name>
-<serial_number>U64934A5Y165843</serial_number>
+<serial_number>EXAMPLE_SERIAL</serial_number>
 <fw_version_number>2022071322</fw_version_number>
-<wlan0_mac_address>04:FE:A1:56:D1:0C</wlan0_mac_address>
+<wlan0_mac_address>02:00:00:00:00:01</wlan0_mac_address>
 <cassette_type>CZ-1004</cassette_type>
 <width_inches>1.0</width_inches>
 <media_length_initial>394.0</media_length_initial>
@@ -241,7 +268,7 @@ After acquiring a lock (see below), you can query status for a specific job:
 </status>
 ```
 
-After receiving code 0, send the raw JPEG bytes. The printer then responds with another status when printing is complete.
+After receiving code 0, send the raw JPEG bytes. The printer then acknowledges receipt of the print data. This alone does not establish physical print completion.
 
 **Error codes:**
 
@@ -373,7 +400,7 @@ The printer auto-sleeps after being idle for several minutes. When asleep:
 ### Multi-Label Printing
 For printing multiple labels sequentially:
 
-1. **Best approach**: Print one label, close TCP socket (triggers cut), poll status until IDLE, reconnect, print next label. This gives ~15 seconds per label.
+1. **Best approach**: Print one label, close TCP socket (triggers cut), poll status until IDLE, reconnect, print next label. A data acknowledgement alone is insufficient; observe print activity followed by settled idle with a successful stage and no printer error.
 
 2. **Lock approach** (not recommended): Acquire lock, print multiple labels without closing socket, release lock. Error-prone — if anything goes wrong, the lock can get stuck and requires manual release.
 
@@ -391,7 +418,7 @@ For printing multiple labels sequentially:
 ```
 brother-vc500w-driver/
 ├── README.md                  # This file — full protocol documentation
-├── LICENSE                    # MIT License
+├── LICENSE                    # Existing noncommercial license
 ├── driver.js                  # Node.js WiFi driver (TCP, cross-platform)
 ├── usb-printer-io.cs          # C# USB driver (Windows, via PowerShell)
 ├── driver-usb.js              # Node.js USB wrapper (Windows, calls C# via PS)
@@ -412,7 +439,7 @@ brother-vc500w-driver/
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+The existing [LICENSE](LICENSE) grants noncommercial use subject to attribution and share-alike terms. Commercial use requires permission from Sunburn Schematics. These terms are unchanged by the cartridge research publication.
 
 ## Contributing
 

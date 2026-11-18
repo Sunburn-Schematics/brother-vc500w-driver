@@ -1,0 +1,150 @@
+V7 experimental 256-byte EEPROM responder — offline build interface
+
+Template: frozen independently reviewed V6 EEPROM responder firmware/interface,
+with its exact V5 updater/capture/bench bodies and reviewed EEPROM contract.
+This is an isolated hardware experiment; it does not change the Sunburn app.
+
+Identity and physical scope
+  firmware: i2c-eeprom-emulator-v7
+  INFO.emulator_capability: eeprom_256_experimental_v1
+  EMU_*.capability: eeprom_256_experimental_v1
+  address: 80 decimal (0x50), classic ESP32 I2C0
+  GPIO21 SDA, GPIO22 SCL, common GND, no ESP32/printer VCC rail joining.
+  Physical cartridge EEPROMs must be disconnected from printer SDA AND SCL
+  before START. The SOLE_0X50 argument is a human assertion, not an electrical
+  test. Initial attach requires an idle powered bus with both inputs high.
+  SCL remains input-only. SDA uses peripheral open-drain; neither signal is
+  driven high. Internal pulls remain disabled. Existing printer pullups apply.
+
+Every boot is passive. A valid saved image is loaded without attaching I2C.
+The saved active-session marker/fault makes an interrupted boot unclean.
+There is no automatic resume, counter reset, manufacturer CRC repair, or
+unclean-state discard command in this first experimental version.
+
+UART commands use newline-terminated ASCII at the existing 921600 baud.
+Responses are one JSON object per line, except the inherited DUMP binary path.
+The inherited authenticated Wi-Fi OTA, USB provisioning, USB application update,
+passive polling capture and explicitly isolated bench commands are retained.
+
+EMU_STATUS
+  One type=emu_status, ok=true frame, with the common state below.
+
+EMU_SNAPSHOT
+  Allowed during active operation. One type=emu_snapshot frame:
+  ok, bytes=256, hex=512 lowercase digits, sha256, crc_r0/crc_rw1/crc_rw2
+  booleans, image_generation, snapshot_is_current and common state.
+  The snapshot uses a bounded seqlock copy with ordered volatile image accesses
+  and acquire/release barriers; it does not mask interrupts for a 256-byte copy.
+  Hashing/formatting happen outside the ISR. A coherent older generation can
+  be returned if printer writes occur during formatting. All three manufacturer
+  CRC flags are reported truthfully; genuine intermediate invalid states are
+  retained. On no image/contention/hash failure, ok=false with
+  message=snapshot_busy_or_unloaded. No flash writes occur.
+
+EMU_LOAD 256 <sha256>
+  Passive only, with no open session, dirty image, unclean boot, active marker,
+  capture, update or USB recovery lock. Replies emu_load_ready with bytes=256,
+  sha256 and timeout_ms=5000. Host then sends exactly 256 immutable raw bytes,
+  no trailer. Length, SHA256 and all three manufacturer CRCs must match.
+  The exact image is assigned the next generation and saved/read back in a
+  clean checkpoint. Result is emu_result, op=load, ok and message.
+  A failed partial/raw transfer sets the inherited random CONTROL_RESET nonce
+  lock so trailing binary cannot become control commands. No automatic retry.
+  Loading the consumed seed preserves every byte, including remaining=6256.
+
+EMU_START SOLE_0X50 <image_sha256> <durable_generation>
+  Requires the exact clean loaded durable image/generation, all three CRCs,
+  no prior fault/unclean boot, passive pins and an idle high bus. UINT32_MAX
+  generation is not activatable. Wi-Fi stops before attachment. An active
+  session marker is atomically checkpointed and read back BEFORE enabling SDA.
+  The detached I2C0 FSM is reset without recovery clocks, and all slave timing
+  fields are initialized from pinned IDF 80MHz APB/100kHz calculations.
+  Result type=emu_result, op=start. transport_qualified remains false.
+
+While a session is open, only INFO, NETINFO, EMU_STATUS, EMU_SNAPSHOT and
+EMU_STOP are allowed. Legacy STOP/STATUS, ARM, BENCH_*, DUMP, WIFI_* and UPDATE
+are intercepted before their preserved implementations. Network reconnection
+and OTA servicing remain suspended even if an ISR fault has detached SDA.
+
+EMU_STOP
+  Waits at most 200ms for idle, services a pending boundary while briefly
+  masked, disables the address/interrupts and releases both GPIOs to inputs.
+  GPIO release and disabled pulls are verified BEFORE any flash operation.
+  Then saves the exact RAM image/fault to an alternating NVS checkpoint, verifies
+  it, closes the session and resumes networking. This can preserve a genuine
+  CRC-invalid intermediate image; it does not repair it. Result type=emu_result,
+  op=stop. A retained transport fault returns ok=false even if bytes were saved.
+  If checkpoint/release fails, the session remains protected and failure is
+  explicit. An already passive/non-open session returns ok=true with
+  message=already_passive_marker_preserved; it does not erase unclean evidence.
+
+EMU_RECOVER ATTACH_V6_UNCHANGED <sha256> <durable_generation>
+  Explicitly acknowledge only the reviewed V6 attach-failure fault10. Requires
+  loaded, inactive/closed, marker=false, clean RAM==durable generation, passive
+  pins/pulls off, no capture/update/USB recovery, all manufacturer CRCs valid,
+  and freshly hashed snapshot SHA==argument==seed SHA==idle SHA. The generation
+  must match exactly. Host must retain/pin the actual failed V6 START and explicit
+  STOP evidence and full unchanged snapshot; reboot-zero metrics are not proof.
+  Saves/readbacks only cleared fault/unclean metadata; no image bytes or
+  generation are changed. Result emu_result op=recover; success message is
+  unchanged_seed_fault_metadata_cleared. On failure, message
+  checkpoint_failed_outcome_uncertain means exactly that: restoring prior RAM
+  flags is not a durable rollback and automatic retry is forbidden.
+  New V7 post-marker attach failures use fault12; new cleanup failure is13.
+  The host provenance guard prevents generalizing this reviewed V6 recovery.
+
+V7 attach diagnostics
+  START performs preflight before persisting an active marker. A preflight
+  rejection returns attach_preflight_failed, with no fault/session/image change.
+  The guard is repeated just before peripheral setup. Idle-high is mandatory.
+  Common state additionally reports last_fault_code and attach_diagnostics:
+  stage, core, levels (bit0 SCL/bit1 SDA), output_enable, sda_mux, scl_mux,
+  pins_input_only, internal_pulls, irq_error and gpio_error. These are the captured
+  preflight readbacks and subsequent operation stage/errors; the common pin
+  fields continue to report actual current configuration.
+
+Common state
+  firmware, capability, emulation_active, session_open, loaded, address,
+  image_sha256, seed_sha256, live_generation, durable_generation, dirty,
+  unclean_boot, session_active_marker, pins_input_only, scl_input_only,
+  sda_open_drain, internal_pulls, last_fault, transport_qualified=false,
+  metrics{rx_bytes,tx_completed_bytes,tx_prefetched_bytes,byte_irqs,starts,
+  stops,nacks,rx_overflows,tx_underflows,fifo_accounting_errors,max_isr_cycles,
+  last_hw_status,invalid_stops}.
+  Healthy last_fault is the string none. Generations are unsigned32;
+  durable_generation <= live_generation and dirty means they differ.
+  image_sha256 is intentionally empty during active/open/uncheckpointed state;
+  the snapshot's own sha256 always describes its actual returned bytes.
+  Pin fields are actual output-enable/open-drain/pull-register observations.
+
+Real-time and persistence limits
+  RAM commits occur only at a qualified write STOP and advance generation once.
+  A repeated START discards pending write data and preserves the pointer.
+  Page latches wrap within 16 bytes; sequential reads wrap FF to 00. Prefetch
+  never advances the EEPROM pointer. Completed read accounting includes the
+  final NACKed transmitted byte and cross-checks byte interrupts against FIFO
+  consumption. Disagreement/overflow/underflow/ambiguous boundaries detach
+  immediately and retain a fault rather than serving guessed shifted bytes.
+  No STOP, forced clock recovery, synthesized EEPROM CRC or automatic reset
+  is generated on a failure.
+
+  A bus ACK confirms volatile RAM acceptance, not durable storage. No flash,
+  Preferences/NVS, network, Serial or allocation occurs inside the ISR.
+  Unexpected power loss can lose RAM writes since START/last checkpoint; the
+  durable active marker exposes that risk on passive restart. Clean EMU_STOP
+  is the explicit durable boundary. NVS alternating complete blobs have an
+  outer CRC/readback; manufacturer inner CRC-invalid states are still stored.
+
+  This is not yet a qualified drop-in M24C02 replacement. The TRM describes
+  SLAVE_TRAN_COMP per byte while the pinned register header describes STOP.
+  FIFO/shifter/final-NACK accounting and IRQ latency must be measured. First
+  qualification targets the actual printer's full256 startup read and normal
+  E8..EF + F0..F7 writes / E8..F7 readback at about100kHz. Generic short reads,
+  page-edge current-address behavior and malformed boundary corners remain
+  unqualified. No claim of lossless timing or <=5ms durable EEPROM writes.
+
+Host ownership
+  Root alone operates COM49/OTA/printer. tools/manage_emulator.py pins the exact
+  device/ELF/source image/provenance, saves evidence before LOAD/START, validates
+  snapshots independently and sends STOP once even if a pre-snapshot fails.
+  Passive/default V5 files and build artifacts remain unchanged.

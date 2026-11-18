@@ -1,0 +1,163 @@
+V5 isolated-bench and passive polling interface
+Template source: frozen independently reviewed V4 bounded100_i2c/INTERFACE.txt and source.
+Revision: i2c-isolated-bench-v5
+Build: build-v5/isolated_bench_i2c.ino.bin, classic ESP32 DOIT DevKitV1/core2.0.17.
+All14 OTA/provisioning/control function bodies, control_rules.h, poll_rules.h and
+pollWindow are byte-identical to V4. Existing V2 USB/OTA block-ACK framing remains
+as documented in ota_i2c/INTERFACE.txt. INFO adds bench_capability:
+"isolated_restore_initial_v1" and reports actual GPIO output/pull register bits.
+
+Default after boot and between all commands: GPIO21SDA/GPIO22SCL inputs, no pulls,
+no I2C driver. Existing ARM/DUMP remain passive. New BENCH commands below temporarily
+enable only open-drain lows/releases. No bus recovery, push-high drive, Wire/IDF
+I2C driver or emulation is used. Printer VCC and ESP32 VCC must remain separate.
+
+Capture behavior
+ARM 100..120000 milliseconds requires core 1, 240 MHz, internal edge buffer available,
+and verified Wi-Fi OFF. Each polling slice masks normal interrupts on core 1 for
+up to 2 ms waiting for an exact observed levels 3->1 START. The first such START
+extends that slice to 100 ms after that observation; later/repeated STARTs never
+extend again. Maximum nominal masked hot-loop duration 102 ms, also capped by the
+remaining ARM duration. The loop checks time even when GPIO does not change.
+No per-edge GPIO ISR dispatcher or esp_timer call is used. The masked hot path
+uses direct GPIO_IN_REG reads, CCOUNT, arithmetic and internal RAM only. All exit
+paths restore interrupts; loop yields 1 ms before the next slice. Watchdogs retain
+the pinned SDK configuration, including 300 ms interrupt-WDT.
+
+The 8192-record buffer never wraps. Overflow preserves earliest records and stops
+capture. There are 128 retained-window metadata entries; the next needed entry
+fails closed and flags metadata overflow. Idle slices with no changed sample are
+discarded and counted. Nonempty untriggered activity slices are retained as
+independent diagnostic windows. Networking resumes after automatic/explicit stop.
+These traces make no lossless claim: changes within one poll interval can be
+missed, and 1 ms yields/normal execution between windows are unsampled.
+
+Binary framing
+The capture JSON header remains one newline-terminated object, followed by exactly
+bytes raw data, newline and dump_end JSON. Schema sunburn.i2c.raw-edges.v1 remains
+unchanged; each record is little-endian <III: timestamp_us low 32, CCOUNT low 32, levels
+(bit 0 SCL, bit 1 SDA; 0..3 only). CRC32 covers raw bytes as in V2.
+
+Additional header fields
+capture_mode:"windowed_polling",sampling_gaps_possible:true,lossless_claim:false,
+sampling_metadata_overflow,discarded_idle_slices,poll_iterations,max_masked_cycles,
+max_masked_us_nominal:102000,wait_slice_us:2000,trigger_tail_us:100000,
+sampling_windows:[...]. isr_callbacks is 0 for compatibility; no GPIO ISR installed.
+
+Every retained window has:
+first_event,event_count: contiguous exact raw-record slice, including a fresh
+initial GPIO snapshot; all slices cover all records without overlap/omission.
+start_us,end_us: full 64-bit microsecond timing bounds for that slice.
+anchor_us,anchor_cycles,anchor_span_cycles: same-core esp_timer/CCOUNT midpoint
+anchor acquired before the masked function, with exposed acquisition uncertainty.
+Timestamp_us is filled after interrupts restore using a signed bounded CCOUNT
+delta; cycle wrapping and pre-anchor conversion are tested offline.
+trigger_event: absolute raw index of first exact observed 3->1 START, or -1;
+trigger_cycles: its CCOUNT, or 0 if untriggered.
+entry_gap_cycles: anchor acquisition end to the fresh initial snapshot; this
+precedes the window and does not conceal a gap between START and the next record.
+max_poll_gap_cycles: maximum observed successive GPIO-sample cycle interval.
+poll_span_cycles: critical-loop first-to-final CCOUNT span.
+masked_cycles: conservative outer CCOUNT span surrounding critical entry/exit;
+includes their overhead and any interrupt immediately after exit, so it can
+exceed the nominal loop bound without implying the watchdog was disabled.
+overflow: this window exhausted edge capacity;missing:false because incomplete
+metadata is never invented;ended_reason:wait_limit,trigger_tail,duration_limit or
+edge_capacity. Header metadata overflow flags the inability to start another
+window; existing slices remain explicit.
+
+Decoding requirements
+Require the V3 window schema. Reset bit/frame state and EEPROM address pointer at
+every window boundary. Never infer transitions, bytes, addresses or memory across
+windows, including across discarded idle slices. Only independently complete
+frames within a window may support bytes. Manufacturer/driver CRC validation and
+independent corroboration remain required before treating bytes as EEPROM data.
+
+Isolated bench prerequisites and electrical ownership
+Both printer SDA and SCL must be physically disconnected from the old IC before
+any BENCH command. ESP32 is on the chip side, with commonGND. The command word
+ISOLATED is an operator assertion; firmware cannot verify physical isolation.
+The initial topology keeps chip VCC supplied ONLY by the printer's stable3.3V.
+No ESP32 VCC wire is connected to that rail. If printer VCC is not stable while
+signals are open, do not use this topology: fully remove/disconnect chip/board
+from printer signal/power paths, then use one isolated3.3V source instead.
+Never switch sources while connected or backpower an unpowered device through
+SDA/SCL. Only a physical two-pole break-before-make disconnect establishes bus
+ownership; printer READY/idle, cover state or a quiet trace is not an ownership lease.
+
+Pullups NONE requires external chip-side pullups to that same stable3.3V supply;
+4.7k on each line is a practical bench alternative, subject to measured rise/load.
+WEAK enables only ESP32 internal pulls while the command runs, for this short,
+low-capacitance isolated experiment at nominal maximum5kHz. Rise-to-high checks
+are bounded at1ms. This is not a claim of compliant rise time on arbitrary wiring.
+After every attempted command, pins return to inputs with both pulls off before
+bench_result is emitted. Output/pull register readback verifies cleanup. An
+unexpected cleanup failure sets update_busy to keep OTA/ARM disabled and is
+reported truthfully. No BENCH activity persists between commands or after reboot.
+
+USB commands (newline terminated ASCII, no binary payload)
+BENCH_READ ISOLATED NONE
+BENCH_READ ISOLATED WEAK
+BENCH_RESTORE ISOLATED NONE <64hex-preimageSHA256>
+BENCH_RESTORE ISOLATED WEAK <64hex-preimageSHA256>
+Require disarmed, no updater busy, no USB recovery lock. Network is suspended for
+this synchronous operation and recovers afterward; OTA is never serviced during
+bench access. Use tools/bench_eeprom.py, which pins exactV5, checks actual input
+state and saves/validates provenance. First hardware operation is READ only.
+
+JSON sequence and interpretation
+bench_start: op read|restore, pullups NONE|WEAK, firmware and timing bounds.
+bench_phase: before each operation in ordered phase list below.
+bench_image: phase,bytes256,hex512lowerhex,sha256,crc_r0,crc_rw1,crc_rw2.
+Read emits pre_read_1,pre_read_2 then final result, even when CRCs disagree.
+Restore emits those two preimages, bench_plan, write phases if needed, then
+post_read_1,post_read_2 and final result. A failed physical read emits no partial
+image. bench_plan gives preimage/expected SHA, initial/old/new u16 values and
+actual changed_offsets. No bytes outside E8,E9,F6,F7 may change.
+bench_result: op,ok,phase,mutation_state,preimage_sha256,expected_sha256,
+postimage_sha256,reads_identical,crcs_valid,pins_input_only,internal_pulls,message.
+reads_identical/crcs_valid describe the two preimages; each postimage carries its
+own CRC flags. Success additionally requires both postimages equal the entire
+expected256-byte image and all three CRC regions pass. A failure may omit later
+images/hashes and never proves unchanged physical memory.
+
+Ordered phases: prepare,pre_read_1,pre_read_2,precheck,counter_write,
+counter_ack_poll,counter_verify,crc_write,crc_ack_poll,post_read_1,post_read_2,
+complete. The complete phase occurs in the final result, not a separate event.
+mutation_state none: no data write attempted. possible_partial: data-write
+transaction about to start/attempted or final verification incomplete.
+counter_verified_crc_pending: counter readback matched, CRC write not yet begun.
+verified: both complete postimages exactly verified after writes.
+unchanged: preimage already equal to initial-length target, no data writes needed.
+No data write is retried automatically. A failure preserves the last mutation
+state, releases pins, and requires explicit human review before another action.
+
+Qualified image and narrow patch
+Every operation reads the complete256-byte chip twice independently and checks
+byte identity, SHA256 and CRC16/X25 (reflected8408,initFFFF,xoroutFFFF,storedLE).
+R0 data00..AD has CRC atAE/AF; RW1 D0..E5 atE6/E7; RW2 E8..F5 atF6/F7.
+Restore requires matching SHA of an already saved successful BENCH_READ receipt.
+It rejects revisionbyte1=3(wristbands), initial0/FFFF, or remaining>initial.
+Expected image copies the full preimage, sets E8/E9 from initial60/61 and updates
+only RW2CRC F6/F7. It writes two bytes atE8, ACK-polls, reads that counter back,
+then writes two bytes atF6 and ACK-polls. Each transfer is inside one16-bytepage.
+ACK polling sends only address probes and STOP, never page data. Bound10ms per
+poll phase, totaloperation8s (RTOS/serial scheduling can add reporting latency).
+No forced clocks/STOP are issued after transport error; the caller releases pins.
+Two exact full postreads must pass before printer signal reconnection.
+The two pages are not power-fail atomic: a failure can leave counter and CRC
+inconsistent. Stable single-source power must be maintained; no blind retry.
+
+Physical scope
+Root confirmed the old roll is actually empty and its final rewind jam was
+mechanical. Resetting the chip cannot make empty media usable. Restoration is
+for a separately installed, feedable fresh roll, after original snapshot review.
+CRC agreement does not authenticate media identity, calibration or physical length.
+
+Validation and evidence
+Sourcepreservation: toolchain/v5-source-preservation.json.
+Frozenartifacts/review: toolchain/v5-build-freeze.json and independentreviewreceipt.
+ASan/UBSan C++17 tests model electrical START/STOP/ACK/EEPROM write-busy behavior,
+use the real full CRC-qualified passive fixture, verify only4 allowed changes,
+all16-bytepagebounds, fullreads, boundedACKpolling, stickyfailures and stucklines.
+No device, flash, COM or printer action was performed by this firmware author.

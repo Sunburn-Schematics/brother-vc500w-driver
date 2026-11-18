@@ -4,3 +4,19 @@ node_modules/
 test-*.jpg
 test-*.png
 examples/preview-*
+
+# Cartridge development artifacts and private device data.
+__pycache__/
+*.pyc
+.venv/
+.arduino/
+.build/
+.cache/
+*.bin
+*.elf
+*.map
+*.jsonl
+private/
+network.json
+.env
+.env.*

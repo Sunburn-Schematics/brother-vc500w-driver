@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="550" viewBox="0 0 1080 550" role="img" aria-labelledby="title description">
+<title id="title">Tested ESP32 to Brother VC-500W cartridge bus wiring</title>
+<desc id="description">GPIO21 connects to SDA, GPIO22 to SCL, grounds are shared. GPIO19 connects to SDA through a 4.7 kiloohm resistor. USB powers ESP32. The printer and ESP32 VCC rails are separate. Original EEPROM SDA and SCL are disconnected.</desc>
+<rect width="1080" height="550" fill="#f7f9fc"/>
+<g font-family="Arial,sans-serif" fill="#142339">
+<text x="40" y="42" font-size="25" font-weight="bold">VC-500W cartridge EEPROM emulation</text>
+<rect x="45" y="95" width="290" height="300" rx="14" fill="#fff" stroke="#213b59" stroke-width="2"/>
+<rect x="715" y="95" width="320" height="300" rx="14" fill="#fff" stroke="#213b59" stroke-width="2"/>
+<text x="72" y="136" font-size="24" font-weight="bold">Classic ESP32</text>
+<text x="742" y="136" font-size="24" font-weight="bold">Brother cartridge bus</text>
+<g font-size="20">
+<text x="72" y="181">GPIO19</text><text x="72" y="241">GPIO21 / SDA</text>
+<text x="72" y="291">GPIO22 / SCL</text><text x="72" y="341">GND</text>
+<text x="742" y="241">SDA</text><text x="742" y="291">SCL</text>
+<text x="742" y="341">GND</text><text x="742" y="181">VCC — separate</text>
+</g>
+<g stroke-width="3" fill="none">
+<path d="M335 175 H420" stroke="#bb5709"/>
+<rect x="420" y="163" width="120" height="24" stroke="#bb5709"/>
+<path d="M540 175 H600 V235 M335 235 H715" stroke="#bb5709"/>
+<path d="M335 285 H715" stroke="#156c99"/>
+<path d="M335 335 H715" stroke="#263446"/>
+</g>
+<circle cx="600" cy="235" r="5" fill="#bb5709"/>
+<text x="445" y="154" font-size="18">4.7 kΩ</text>
+<text x="380" y="224" font-size="16" fill="#914000">Open-drain SDA; resistor pullup only</text>
+<text x="45" y="430" font-size="20" font-weight="bold">USB powers ESP32. Do not join the power rails.</text>
+<text x="45" y="465" font-size="19">Disconnect the physical EEPROM's SDA/SCL. Only one responder at 0x50.</text>
+<text x="45" y="500" font-size="19">Disable GPIO19 before printer power-off; no automatic power detection.</text>
+<text x="45" y="531" font-size="16" fill="#52637a">Bench schematic, not connector orientation. Confirm your pin mapping and bus voltage.</text>
+</g></svg>
